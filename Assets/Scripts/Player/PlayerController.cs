@@ -6,12 +6,22 @@ public class PlayerController : MonoBehaviour
 {
     public float m_moveSpeed;
 
-    private bool m_isMoving;
+    public LayerMask m_solidLayer;
+    public LayerMask m_grassLayer;
+
+    private bool isMoving;
     private Vector2 input;
+
+    Animator m_anim;
+
+    private void Awake()
+    {
+        m_anim = GetComponent<Animator>();
+    }
 
     void Update()
     {
-        if (!m_isMoving)
+        if (!isMoving)
         {
             input.x = Input.GetAxisRaw("Horizontal");
             input.y = Input.GetAxisRaw("Vertical");
@@ -24,18 +34,25 @@ public class PlayerController : MonoBehaviour
 
             if (input != Vector2.zero)
             {
+                m_anim.SetFloat("MoveX", input.x);
+                m_anim.SetFloat("MoveY", input.y);
+
                 var targetPos = transform.position;
                 targetPos.x += input.x;
                 targetPos.y += input.y;
 
-                StartCoroutine(Move(targetPos));
+                if (IsWalkable(targetPos))
+                {
+                    StartCoroutine(Move(targetPos));
+                }
             }
         }
+        m_anim.SetBool("isMoving", isMoving);
     }
 
     IEnumerator Move(Vector3 targetPos)
     {
-        m_isMoving = true;
+        isMoving = true;
 
         while ((targetPos - transform.position).sqrMagnitude > Mathf.Epsilon)
         {
@@ -44,6 +61,28 @@ public class PlayerController : MonoBehaviour
         }
         transform.position = targetPos;
 
-        m_isMoving = false;
+        isMoving = false;
+
+        CheckForEncounters();
+    }
+
+    bool IsWalkable(Vector3 targetPos)
+    {
+        if (Physics2D.OverlapCircle(targetPos, 0.3f, m_solidLayer) != null)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    void CheckForEncounters()
+    {
+        if (Physics2D.OverlapCircle(transform.position, 0.2f, m_grassLayer) != null)
+        {
+            if (Random.Range(1, 50) <= 10) // 1マスごとにランダムで取得
+            {
+                Debug.Log("a");
+            }
+        }
     }
 }
