@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 
     public LayerMask m_solidLayer;
     public LayerMask m_grassLayer;
+    public LayerMask m_npcLayer;
 
     public event Action OnEncountered;
 
@@ -44,10 +45,30 @@ public class PlayerController : MonoBehaviour
                 targetPos.x += input.x;
                 targetPos.y += input.y;
 
-                StartCoroutine(Move(targetPos));
+                if (IsWalkable(targetPos))
+                {
+                    StartCoroutine(Move(targetPos));
+                }
             }
         }
         m_anim.SetBool("isMoving", isMoving);
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Interact();
+        }
+    }
+
+    void Interact()
+    {
+        var facingDir = new Vector3(m_anim.GetFloat("MoveX"), m_anim.GetFloat("MoveY"));
+        var interactPos = transform.position + facingDir;
+
+        var collider = Physics2D.OverlapCircle(interactPos, 0.3f, m_npcLayer);
+        if (collider != null)
+        {
+            collider.GetComponent<Interactable>()?.Interact();
+        }
     }
 
     IEnumerator Move(Vector3 targetPos)
@@ -64,6 +85,18 @@ public class PlayerController : MonoBehaviour
         isMoving = false;
 
         CheckForEncounters();
+    }
+
+    /// <summary>
+    /// 貫通出来ないようにしている
+    /// </summary>
+    bool IsWalkable(Vector3 targetPos)
+    {
+        if (Physics2D.OverlapCircle(targetPos, 0.3f, m_solidLayer | m_npcLayer) != null)
+        {
+            return false;
+        }
+        return true;
     }
 
     void CheckForEncounters()

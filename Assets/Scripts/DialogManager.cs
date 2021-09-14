@@ -15,6 +15,7 @@ public class DialogManager : MonoBehaviour
 
     Dialog dialog;
     int m_currentLine = 0;
+    bool isTyping;
 
     public static DialogManager Instance { get; private set; }
 
@@ -39,7 +40,7 @@ public class DialogManager : MonoBehaviour
     /// </summary>
     public void HandleUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !isTyping)
         {
             ++m_currentLine;
             if (m_currentLine < dialog.Lines.Count)
@@ -60,11 +61,13 @@ public class DialogManager : MonoBehaviour
     /// </summary>
     public IEnumerator TypeDialog(string line)
     {
+        isTyping = true;
         m_dialogText.text = " ";
         foreach (var letter in line.ToCharArray())
         {
             m_dialogText.text += letter;
             yield return new WaitForSeconds(1f / m_lettersPerSecond);
         }
+        isTyping = false;
     }
 }

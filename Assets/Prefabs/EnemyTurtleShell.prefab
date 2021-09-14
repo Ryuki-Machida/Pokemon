@@ -284,7 +284,7 @@ GameObject:
   - component: {fileID: 7602820231916161344}
   - component: {fileID: 7548476737230670994}
   m_Layer: 0
-  m_Name: TurtleShell
+  m_Name: EnemyTurtleShell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -298,7 +298,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7608132312941501328}
   m_LocalRotation: {x: 0, y: -0.9396926, z: 0, w: 0.34202018}
-  m_LocalPosition: {x: -2, y: 0, z: -3}
+  m_LocalPosition: {x: 3, y: 0, z: 4}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
   - {fileID: 7602758466814092246}

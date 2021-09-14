@@ -26,6 +26,19 @@ public class GamaManager : MonoBehaviour
     {
         m_player.OnEncountered += Fade;
         m_battleManager.OnBattleOver += EndBattle;
+
+        DialogManager.Instance.OnShowDialog += () =>
+        {
+            state = GameState.Dialog;
+        };
+
+        DialogManager.Instance.OnCloseDialog += () =>
+        {
+            if (state == GameState.Dialog)
+            {
+                state = GameState.FreeRoam;
+            }
+        };
     }
 
     /// <summary>

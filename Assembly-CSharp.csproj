@@ -75,12 +75,14 @@
     <Compile Include="Assets\Scripts\Battle\HPBar.cs" />
     <Compile Include="Assets\Scripts\Battle\PartyMemberUI.cs" />
     <Compile Include="Assets\Scripts\Battle\PartyScreen.cs" />
+    <Compile Include="Assets\Scripts\Character\NpcController.cs" />
     <Compile Include="Assets\Scripts\Character\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Data\ConditionDB.cs" />
     <Compile Include="Assets\Scripts\Dialog.cs" />
     <Compile Include="Assets\Scripts\DialogManager.cs" />
     <Compile Include="Assets\Scripts\FadeManager.cs" />
     <Compile Include="Assets\Scripts\GamaManager.cs" />
+    <Compile Include="Assets\Scripts\Interactable.cs" />
     <Compile Include="Assets\Scripts\MapArea.cs" />
     <Compile Include="Assets\Scripts\Pokemon\Condition.cs" />
     <Compile Include="Assets\Scripts\Pokemon\Move.cs" />
