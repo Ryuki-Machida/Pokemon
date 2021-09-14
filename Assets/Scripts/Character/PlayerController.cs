@@ -5,27 +5,20 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
-    public float m_moveSpeed;
-
-    public LayerMask m_solidLayer;
-    public LayerMask m_grassLayer;
-    public LayerMask m_npcLayer;
-
     public event Action OnEncountered;
 
-    private bool isMoving;
     private Vector2 input;
 
-    Animator m_anim;
+    Character m_character;
 
     private void Awake()
     {
-        m_anim = GetComponent<Animator>();
+        m_character = GetComponent<Character>();
     }
 
     public void HandleUpdate()
     {
-        if (!isMoving)
+        if (!m_character.IsMoving)
         {
             input.x = Input.GetAxisRaw("Horizontal");
             input.y = Input.GetAxisRaw("Vertical");
@@ -38,20 +31,11 @@ public class PlayerController : MonoBehaviour
 
             if (input != Vector2.zero)
             {
-                m_anim.SetFloat("MoveX", input.x);
-                m_anim.SetFloat("MoveY", input.y);
-
-                var targetPos = transform.position;
-                targetPos.x += input.x;
-                targetPos.y += input.y;
-
-                if (IsWalkable(targetPos))
-                {
-                    StartCoroutine(Move(targetPos));
-                }
+                StartCoroutine(m_character.Move(input, CheckForEncounters));
             }
         }
-        m_anim.SetBool("isMoving", isMoving);
+
+        m_character.HandleUpdate();
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -61,51 +45,24 @@ public class PlayerController : MonoBehaviour
 
     void Interact()
     {
-        var facingDir = new Vector3(m_anim.GetFloat("MoveX"), m_anim.GetFloat("MoveY"));
+        var facingDir = new Vector3(m_character.Animator.MoveX, m_character.Animator.MoveY);
         var interactPos = transform.position + facingDir;
 
-        var collider = Physics2D.OverlapCircle(interactPos, 0.3f, m_npcLayer);
+        var collider = Physics2D.OverlapCircle(interactPos, 0.3f, GameLayers.gl.NpcLayer);
         if (collider != null)
         {
             collider.GetComponent<Interactable>()?.Interact();
         }
     }
 
-    IEnumerator Move(Vector3 targetPos)
-    {
-        isMoving = true;
-
-        while ((targetPos - transform.position).sqrMagnitude > Mathf.Epsilon)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, m_moveSpeed * Time.deltaTime);
-            yield return null;
-        }
-        transform.position = targetPos;
-
-        isMoving = false;
-
-        CheckForEncounters();
-    }
-
-    /// <summary>
-    /// 貫通出来ないようにしている
-    /// </summary>
-    bool IsWalkable(Vector3 targetPos)
-    {
-        if (Physics2D.OverlapCircle(targetPos, 0.3f, m_solidLayer | m_npcLayer) != null)
-        {
-            return false;
-        }
-        return true;
-    }
 
     void CheckForEncounters()
     {
-        if (Physics2D.OverlapCircle(transform.position, 0.2f, m_grassLayer) != null)
+        if (Physics2D.OverlapCircle(transform.position, 0.2f, GameLayers.gl.GrassLayer) != null)
         {
             if (UnityEngine.Random.Range(1, 50) <= 10) // 1マスごとにランダムで取得
             {
-                m_anim.SetBool("isMoving", false);
+                m_character.Animator.IsMoving = false;
                 OnEncountered(); //切り替え
             }
         }

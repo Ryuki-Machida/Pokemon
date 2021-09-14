@@ -75,6 +75,8 @@
     <Compile Include="Assets\Scripts\Battle\HPBar.cs" />
     <Compile Include="Assets\Scripts\Battle\PartyMemberUI.cs" />
     <Compile Include="Assets\Scripts\Battle\PartyScreen.cs" />
+    <Compile Include="Assets\Scripts\Character\Character.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterAnimator.cs" />
     <Compile Include="Assets\Scripts\Character\NpcController.cs" />
     <Compile Include="Assets\Scripts\Character\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Data\ConditionDB.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="Assets\Scripts\DialogManager.cs" />
     <Compile Include="Assets\Scripts\FadeManager.cs" />
     <Compile Include="Assets\Scripts\GamaManager.cs" />
+    <Compile Include="Assets\Scripts\GameLayers.cs" />
     <Compile Include="Assets\Scripts\Interactable.cs" />
     <Compile Include="Assets\Scripts\MapArea.cs" />
     <Compile Include="Assets\Scripts\Pokemon\Condition.cs" />
@@ -90,6 +93,7 @@
     <Compile Include="Assets\Scripts\Pokemon\Pokemon.cs" />
     <Compile Include="Assets\Scripts\Pokemon\PokemonBase.cs" />
     <Compile Include="Assets\Scripts\Pokemon\PokemonParty.cs" />
+    <Compile Include="Assets\Scripts\SpriteAnimator.cs" />
     <None Include="Assets\Fade\Materials\UI-Fade-Cutout.shader" />
     <None Include="Assets\Fade\Materials\UI-Mask.shader" />
     <None Include="Assets\Fade\Materials\UI-Fade-Alpha.shader" />
