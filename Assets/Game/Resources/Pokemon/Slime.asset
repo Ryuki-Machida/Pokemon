@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55fecbe447b4ece428027d02d3bc7d48, type: 3}
+  m_Name: Slime
+  m_EditorClassIdentifier: 
+  m_name: "\u30B9\u30E9\u30A4\u30E0"
+  m_description: 
+  m_PokemonObject: {fileID: 5028550622084777175, guid: 30e729d7e65b5824e930892a54c573f6,
+    type: 3}
+  type1: 2
+  type2: 0
+  m_maxHp: 39
+  m_attack: 52
+  m_defense: 43
+  m_spAttack: 60
+  m_spDefense: 50
+  m_speed: 65
+  m_learnableMoves:
+  - moveBase: {fileID: 11400000, guid: 7bacd6a79596b9e429060e11ec9ad0ab, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: ccd752cdb62c30a4997cd5d8fff58a1e, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: 97440559cd0c5cc48bedb10d83da3c19, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: 8d4c5613ea32239459d118f3379eb233, type: 2}
+    level: 1

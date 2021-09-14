@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class PlayerController : MonoBehaviour
 
     public LayerMask m_solidLayer;
     public LayerMask m_grassLayer;
+
+    public event Action OnEncountered;
 
     private bool isMoving;
     private Vector2 input;
@@ -19,7 +22,7 @@ public class PlayerController : MonoBehaviour
         m_anim = GetComponent<Animator>();
     }
 
-    void Update()
+    public void HandleUpdate()
     {
         if (!isMoving)
         {
@@ -41,10 +44,7 @@ public class PlayerController : MonoBehaviour
                 targetPos.x += input.x;
                 targetPos.y += input.y;
 
-                if (IsWalkable(targetPos))
-                {
-                    StartCoroutine(Move(targetPos));
-                }
+                StartCoroutine(Move(targetPos));
             }
         }
         m_anim.SetBool("isMoving", isMoving);
@@ -66,22 +66,14 @@ public class PlayerController : MonoBehaviour
         CheckForEncounters();
     }
 
-    bool IsWalkable(Vector3 targetPos)
-    {
-        if (Physics2D.OverlapCircle(targetPos, 0.3f, m_solidLayer) != null)
-        {
-            return false;
-        }
-        return true;
-    }
-
     void CheckForEncounters()
     {
         if (Physics2D.OverlapCircle(transform.position, 0.2f, m_grassLayer) != null)
         {
-            if (Random.Range(1, 50) <= 10) // 1マスごとにランダムで取得
+            if (UnityEngine.Random.Range(1, 50) <= 10) // 1マスごとにランダムで取得
             {
-                Debug.Log("a");
+                m_anim.SetBool("isMoving", false);
+                OnEncountered(); //切り替え
             }
         }
     }
