@@ -24,7 +24,7 @@ public class Character : MonoBehaviour
         targetPos.x += moveVec.x;
         targetPos.y += moveVec.y;
 
-        if (!IsWalkable(targetPos))
+        if (!IsPathClear(targetPos))
         {
             yield break;
         }
@@ -51,6 +51,21 @@ public class Character : MonoBehaviour
     /// <summary>
     /// 貫通出来ないようにしている
     /// </summary>
+    bool IsPathClear(Vector3 targetPos)
+    {
+        var diff = targetPos - transform.position;
+        var dif = diff.normalized;
+
+        if (Physics2D.BoxCast(transform.position + dif, new Vector2(0.2f, 0.2f), 0f, dif, diff.magnitude - 1, GameLayers.gl.SolidLayer | GameLayers.gl.NpcLayer | GameLayers.gl.PlayerLayer) == true)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// 貫通出来ないようにしている
+    /// </summary>
     bool IsWalkable(Vector3 targetPos)
     {
         if (Physics2D.OverlapCircle(targetPos, 0.3f, GameLayers.gl.SolidLayer | GameLayers.gl.NpcLayer) != null)
@@ -58,6 +73,25 @@ public class Character : MonoBehaviour
             return false;
         }
         return true;
+    }
+
+    /// <summary>
+    /// 向きを変える
+    /// </summary>
+    public void LookTowards(Vector3 targetPos)
+    {
+        var xdiff = Mathf.Floor(targetPos.x) - Mathf.Floor(transform.position.x);
+        var ydiff = Mathf.Floor(targetPos.y) - Mathf.Floor(transform.position.y);
+
+        if (xdiff == 0 || ydiff == 0)
+        {
+            m_charAnim.MoveX = Mathf.Clamp(xdiff, -1, 1);
+            m_charAnim.MoveY = Mathf.Clamp(ydiff, -1, 1);
+        }
+        else
+        {
+            Debug.LogError("キャラクターに斜めに見るように頼むことはできません");
+        }
     }
 
     public CharacterAnimator Animator

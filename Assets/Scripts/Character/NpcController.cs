@@ -22,21 +22,23 @@ public class NpcController : MonoBehaviour, Interactable
         m_character = GetComponent<Character>();
     }
 
-    public void Interact()
+    public void Interact(Transform initiator)
     {
         if (state == NpcState.Idle)
         {
-            StartCoroutine(DialogManager.Instance.ShowDialog(m_dialog));
+            state = NpcState.Dialog;
+            m_character.LookTowards(initiator.position); //対象のオブジェクトの方を向く
+
+            StartCoroutine(DialogManager.Instance.ShowDialog(m_dialog, () =>
+            {
+                m_idleTimer = 0;
+                state = NpcState.Idle;
+            }));
         }
     }
 
     private void Update()
     {
-        if (DialogManager.Instance.IsShowing)
-        {
-            return;
-        }
-
         if (state == NpcState.Idle)
         {
             m_idleTimer += Time.deltaTime;
@@ -59,11 +61,17 @@ public class NpcController : MonoBehaviour, Interactable
     {
         state = NpcState.Walking;
 
+        var oldPos = transform.position;
+
         yield return m_character.Move(m_movePattern[m_currentPattern]);
-        m_currentPattern = (m_currentPattern + 1) % m_movePattern.Count;
+
+        if (transform.position != oldPos) //プレイヤーにぶつかってる間は止める
+        {
+            m_currentPattern = (m_currentPattern + 1) % m_movePattern.Count;
+        }
 
         state = NpcState.Idle;
     }
 }
 
-public enum NpcState { Idle, Walking }
+public enum NpcState { Idle, Walking, Dialog }

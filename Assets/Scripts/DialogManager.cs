@@ -14,6 +14,8 @@ public class DialogManager : MonoBehaviour
     public event Action OnCloseDialog;
 
     Dialog dialog;
+    Action onDialogFinish;
+
     int m_currentLine = 0;
     bool isTyping;
 
@@ -26,7 +28,7 @@ public class DialogManager : MonoBehaviour
         Instance = this;
     }
 
-    public IEnumerator ShowDialog(Dialog dialog)
+    public IEnumerator ShowDialog(Dialog dialog, Action onFinish = null)
     {
         yield return new WaitForEndOfFrame();
 
@@ -34,6 +36,8 @@ public class DialogManager : MonoBehaviour
 
         IsShowing = true;
         this.dialog = dialog;
+        onDialogFinish = onFinish;
+
         m_dialogBox.SetActive(true);
         StartCoroutine(TypeDialog(dialog.Lines[0]));
     }
@@ -55,6 +59,7 @@ public class DialogManager : MonoBehaviour
                 m_currentLine = 0;
                 IsShowing = false;
                 m_dialogBox.SetActive(false);
+                onDialogFinish?.Invoke();
                 OnCloseDialog?.Invoke();
             }
         }

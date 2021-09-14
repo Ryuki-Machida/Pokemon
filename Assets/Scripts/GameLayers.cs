@@ -10,6 +10,7 @@ public class GameLayers : MonoBehaviour
     [SerializeField] LayerMask m_solidLayer;
     [SerializeField] LayerMask m_grassLayer;
     [SerializeField] LayerMask m_npcLayer;
+    [SerializeField] LayerMask m_playerLayer;
 
     public static GameLayers gl { get; set; }
 
@@ -31,5 +32,10 @@ public class GameLayers : MonoBehaviour
     public LayerMask NpcLayer
     {
         get { return m_npcLayer; }
+    }
+
+    public LayerMask PlayerLayer
+    {
+        get { return m_playerLayer; }
     }
 }
