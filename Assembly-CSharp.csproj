@@ -64,7 +64,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Fade\Scripts\Fade.cs" />
+    <Compile Include="Assets\Fade\Scripts\FadeImage.cs" />
+    <Compile Include="Assets\Fade\Scripts\FadeUI.cs" />
+    <Compile Include="Assets\Fade\Scripts\IFade.cs" />
+    <Compile Include="Assets\Scripts\Character\PlayerController.cs" />
+    <None Include="Assets\Fade\Materials\UI-Fade-Cutout.shader" />
+    <None Include="Assets\Fade\Materials\UI-Mask.shader" />
+    <None Include="Assets\Fade\Materials\UI-Fade-Alpha.shader" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.26f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
@@ -596,6 +603,9 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/vantan/Documents/Pokemon/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Cinemachine">
+      <HintPath>C:/Users/vantan/Documents/Pokemon/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.Animation.Runtime">
       <HintPath>C:/Users/vantan/Documents/Pokemon/Library/ScriptAssemblies/Unity.2D.Animation.Runtime.dll</HintPath>
     </Reference>
@@ -658,6 +668,9 @@
     </Reference>
     <Reference Include="Unity.2D.Animation.Editor">
       <HintPath>C:/Users/vantan/Documents/Pokemon/Library/ScriptAssemblies/Unity.2D.Animation.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="com.unity.cinemachine.editor">
+      <HintPath>C:/Users/vantan/Documents/Pokemon/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics.Editor">
       <HintPath>C:/Users/vantan/Documents/Pokemon/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
