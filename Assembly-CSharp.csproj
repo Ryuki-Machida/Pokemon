@@ -79,6 +79,7 @@
     <Compile Include="Assets\Scripts\Character\CharacterAnimator.cs" />
     <Compile Include="Assets\Scripts\Character\NpcController.cs" />
     <Compile Include="Assets\Scripts\Character\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Character\TrainerController.cs" />
     <Compile Include="Assets\Scripts\Data\ConditionDB.cs" />
     <Compile Include="Assets\Scripts\Dialog.cs" />
     <Compile Include="Assets\Scripts\DialogManager.cs" />

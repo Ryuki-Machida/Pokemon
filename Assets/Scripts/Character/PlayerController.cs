@@ -6,6 +6,7 @@ using System;
 public class PlayerController : MonoBehaviour
 {
     public event Action OnEncountered;
+    public event Action<Collider2D> OnTrainersView;
 
     private Vector2 input;
 
@@ -31,7 +32,7 @@ public class PlayerController : MonoBehaviour
 
             if (input != Vector2.zero)
             {
-                StartCoroutine(m_character.Move(input, CheckForEncounters));
+                StartCoroutine(m_character.Move(input, OnMoveOver));
             }
         }
 
@@ -55,6 +56,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void OnMoveOver()
+    {
+        CheckForEncounters();
+        CheckTrainersView();
+    }
+
 
     void CheckForEncounters()
     {
@@ -65,6 +72,16 @@ public class PlayerController : MonoBehaviour
                 m_character.Animator.IsMoving = false;
                 OnEncountered(); //切り替え
             }
+        }
+    }
+
+    void CheckTrainersView()
+    {
+        var collider = Physics2D.OverlapCircle(transform.position, 0.2f, GameLayers.gl.FovLayer);
+        if (collider != null)
+        {
+            m_character.Animator.IsMoving = false;
+            OnTrainersView?.Invoke(collider);
         }
     }
 }

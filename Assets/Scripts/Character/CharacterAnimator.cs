@@ -9,6 +9,8 @@ public class CharacterAnimator : MonoBehaviour
     [SerializeField] List<Sprite> m_walkRight;
     [SerializeField] List<Sprite> m_walkLeft;
 
+    [SerializeField] FacingDirection m_facingDirection = default;
+
     //パラメータ
     public float MoveX { get; set; }
 
@@ -34,6 +36,7 @@ public class CharacterAnimator : MonoBehaviour
         m_upSpanim = new SpriteAnimator(m_walkUp, m_spriteRenderer);
         m_rightSpanim = new SpriteAnimator(m_walkRight, m_spriteRenderer);
         m_leftSpanim = new SpriteAnimator(m_walkLeft, m_spriteRenderer);
+        SetFacingDirection(m_facingDirection);
 
         m_currentAnim = m_downSpanim;
     }
@@ -75,4 +78,34 @@ public class CharacterAnimator : MonoBehaviour
 
         previouslyMoving = IsMoving;
     }
+
+    /// <summary>
+    /// Npcの最初の向きを変える
+    /// </summary>
+    public void SetFacingDirection(FacingDirection dir)
+    {
+        if (dir == FacingDirection.Right)
+        {
+            MoveX = 1;
+        }
+        else if (dir == FacingDirection.Left)
+        {
+            MoveX = -1;
+        }
+        else if (dir == FacingDirection.Down)
+        {
+            MoveY = -1;
+        }
+        else if (dir == FacingDirection.Up)
+        {
+            MoveY = 1;
+        }
+    }
+
+    public FacingDirection DefaultDirection
+    {
+        get { return m_facingDirection; }
+    }
 }
+
+public enum FacingDirection { Up, Down, Right, Left }
