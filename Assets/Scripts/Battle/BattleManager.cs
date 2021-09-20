@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum BattleState { Start, ActionSelection, MoveSelection, RunningTurn, Busy, PartyScreen, BattleOver }
+public enum BattleState { Start, ActionSelection, MoveSelection, RunningTurn, Busy, PartyScreen, AboutToUse , BattleOver }
 
 public enum BattleAction { Move, SwitchPokemon, UseItem, Run }
 
@@ -26,6 +26,7 @@ public class BattleManager : MonoBehaviour
     int m_currentAction;
     int m_currentMove;
     int m_currentMenber;
+    bool m_aboutToUseChoice;
 
     PokemonParty m_playerParty;
     PokemonParty m_trainerParty;
@@ -35,6 +36,9 @@ public class BattleManager : MonoBehaviour
     PlayerController player;
     TrainerController trainer;
 
+    /// <summary>
+    /// バトル
+    /// </summary>
     public void StartBattle(PokemonParty playerParty, Pokemon wildPokemon)
     {
         this.m_playerParty = playerParty;
@@ -42,6 +46,9 @@ public class BattleManager : MonoBehaviour
         StartCoroutine(SetupBattle());
     }
 
+    /// <summary>
+    /// トレーナ戦
+    /// </summary>
     public void StartTrainerBattle(PokemonParty playerParty, PokemonParty trainerParty)
     {
         this.m_playerParty = playerParty;
@@ -138,6 +145,18 @@ public class BattleManager : MonoBehaviour
         state = BattleState.MoveSelection;
         dialogBox.EnableActionSelector(false);
         dialogBox.EnableMoveSelector(true);
+    }
+
+    /// <summary>
+    /// トレーナが次のポケモンを出す前に
+    /// </summary>
+    IEnumerator AboutToUse(Pokemon newPokemon)
+    {
+        state = BattleState.Busy;
+        yield return dialogBox.TypeDialog($"{trainer.Name}は　{newPokemon.Base.Name}を出そうとしている。　交換しますか？");
+
+        state = BattleState.AboutToUse;
+        dialogBox.EndbleChoiceBox(true);
     }
 
     IEnumerator RunTurns(BattleAction playerAction)
@@ -348,6 +367,7 @@ public class BattleManager : MonoBehaviour
             yield return new WaitForSeconds(2f);
 
             CheckForBattleOver(targetUnit, sourceUnit);
+            yield return new WaitUntil(() => state == BattleState.RunningTurn);
         }
     }
 
@@ -430,7 +450,7 @@ public class BattleManager : MonoBehaviour
                 var nextPokemon = m_trainerParty.GetHealthyPokemon();
                 if (nextPokemon != null)
                 {
-                    StartCoroutine(SendNextTrainerPokemon(nextPokemon));
+                    StartCoroutine(AboutToUse(nextPokemon));
                 }
                 else
                 {
@@ -473,6 +493,10 @@ public class BattleManager : MonoBehaviour
         else if (state == BattleState.PartyScreen)
         {
             HandlePartySelection();
+        }
+        else if (state == BattleState.AboutToUse)
+        {
+            HandleAboutToUse();
         }
     }
 
@@ -621,8 +645,57 @@ public class BattleManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.LeftShift))
         {
+            if (playerUnit.Pokemon.HP <= 0)
+            {
+                partyScreen.SetMessageText("手持ちにポケモンが残ってない");
+                return;
+            }
+
             partyScreen.gameObject.SetActive(false);
-            ActionSelection();
+
+            if (prevState == BattleState.AboutToUse)
+            {
+                prevState = null;
+                StartCoroutine(SendNextTrainerPokemon());
+            }
+            else
+            {
+                ActionSelection();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 次のポケモンが出る前にポケモンを交換するか
+    /// </summary>
+    void HandleAboutToUse()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            m_aboutToUseChoice = !m_aboutToUseChoice;
+        }
+
+        dialogBox.UpdateChoiceBox(m_aboutToUseChoice);
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            dialogBox.EndbleChoiceBox(false);
+            if (m_aboutToUseChoice == true)
+            {
+                //はいを選んだ
+                prevState = BattleState.AboutToUse;
+                OpenPartySelection();
+            }
+            else
+            {
+                //いいえを選んだ
+                StartCoroutine(SendNextTrainerPokemon());
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            dialogBox.EndbleChoiceBox(false);
+            StartCoroutine(SendNextTrainerPokemon());
         }
     }
 
@@ -643,16 +716,25 @@ public class BattleManager : MonoBehaviour
         dialogBox.SetMoveNames(newPokemon.Moves);
         yield return dialogBox.TypeDialog($"ゆけっ！　{playerUnit.Pokemon.Base.Name}！");
 
-        state = BattleState.RunningTurn;
+        if (prevState == null)
+        {
+            state = BattleState.RunningTurn;
+        }
+        else if (prevState == BattleState.AboutToUse)
+        {
+            prevState = null;
+            StartCoroutine(SendNextTrainerPokemon());
+        }
     }
 
     /// <summary>
     /// トレーナーが次のポケモンを繰り出すとき
     /// </summary>
-    IEnumerator SendNextTrainerPokemon(Pokemon nextPokemon)
+    IEnumerator SendNextTrainerPokemon()
     {
         state = BattleState.Busy;
 
+        var nextPokemon = m_trainerParty.GetHealthyPokemon();
         enemyUnit.Setup(nextPokemon);
         yield return dialogBox.TypeDialog($"{trainer.Name}が {nextPokemon.Base.Name}を繰り出してきた！");
 

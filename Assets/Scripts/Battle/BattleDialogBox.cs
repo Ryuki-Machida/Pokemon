@@ -13,6 +13,7 @@ public class BattleDialogBox : MonoBehaviour
     [SerializeField] GameObject m_actionSelector;
     [SerializeField] GameObject m_moveSelector;
     [SerializeField] GameObject m_moveDetails;
+    [SerializeField] GameObject m_choicBox;
 
     [SerializeField] List<Image> m_actionImage;
     [SerializeField] List<Text> m_actionText;
@@ -21,6 +22,11 @@ public class BattleDialogBox : MonoBehaviour
     [SerializeField] List<Image> m_moveImage;
 
     [SerializeField] List<Text> m_ppText;
+
+    [SerializeField] Text m_yesText;
+    [SerializeField] Text m_noText;
+    [SerializeField] Image m_yesImage;
+    [SerializeField] Image m_noImage;
 
     public void SetDialog(string dialog)
     {
@@ -65,6 +71,11 @@ public class BattleDialogBox : MonoBehaviour
     {
         m_moveSelector.SetActive(enabled);
         m_moveDetails.SetActive(enabled);
+    }
+
+    public void EndbleChoiceBox(bool enabled)
+    {
+        m_choicBox.SetActive(enabled);
     }
 
     /// <summary>
@@ -162,6 +173,27 @@ public class BattleDialogBox : MonoBehaviour
             {
                 m_typeColor[i].color = moves[i].Base.TypeColor;
             }
+        }
+    }
+
+    /// <summary>
+    /// 交換を選ぶ時のtext,image
+    /// </summary>
+    public void UpdateChoiceBox(bool yesSelected)
+    {
+        if (yesSelected)
+        {
+            m_yesImage.color = Color.black;
+            m_yesText.color = Color.white;
+            m_noImage.color = Color.white;
+            m_noText.color = Color.black;
+        }
+        else
+        {
+            m_noImage.color = Color.black;
+            m_noText.color = Color.white;
+            m_yesImage.color = Color.white;
+            m_yesText.color = Color.black;
         }
     }
 }
