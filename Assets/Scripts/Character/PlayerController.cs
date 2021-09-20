@@ -5,6 +5,8 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] string m_name;
+
     public event Action OnEncountered;
     public event Action<Collider2D> OnTrainersView;
 
@@ -83,5 +85,10 @@ public class PlayerController : MonoBehaviour
             m_character.Animator.IsMoving = false;
             OnTrainersView?.Invoke(collider);
         }
+    }
+
+    public string Name
+    {
+        get { return m_name; }
     }
 }

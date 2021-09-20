@@ -41,7 +41,13 @@ public class BattleUnit : MonoBehaviour
             //選ばれた敵のゲームオブジェクトを子オブジェクトとして表示する
             poke = GameObject.Instantiate(Pokemon.Base.PokemonObject, transform);
         }
-        Hud.SetData(pokemon);
+        hud.gameObject.SetActive(true);
+        hud.SetData(pokemon);
+    }
+
+    public void Clear()
+    {
+        hud.gameObject.SetActive(false);
     }
 
     /// <summary>

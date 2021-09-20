@@ -21,7 +21,7 @@ MonoBehaviour:
   m_alwaysHits: 0
   m_pp: 20
   m_priority: 0
-  m_category: 0
+  m_category: 2
   m_effects:
     boosts:
     - stat: 5

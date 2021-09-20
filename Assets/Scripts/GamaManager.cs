@@ -17,8 +17,11 @@ public class GamaManager : MonoBehaviour
 
     GameState state;
 
+    public static GamaManager Instance { get; private set; }
+
     private void Awake()
     {
+        Instance = this;
         ConditionDB.Init();
     }
 
@@ -66,6 +69,7 @@ public class GamaManager : MonoBehaviour
     /// </summary>
     void StartBattle()
     {
+        state = GameState.Battle;
         m_battleManager.gameObject.SetActive(true);
         m_worldCamera.gameObject.SetActive(false);
 
@@ -73,6 +77,21 @@ public class GamaManager : MonoBehaviour
         var wildPokemon = FindObjectOfType<MapArea>().GetComponent<MapArea>().GetRandomWildPokemon();
 
         m_battleManager.StartBattle(playerParty, wildPokemon);
+    }
+
+    /// <summary>
+    /// トレーナーバトルが始まった時の処理
+    /// </summary>
+    public void StartTrainerBattle(TrainerController  trainer)
+    {
+        state = GameState.Battle;
+        m_battleManager.gameObject.SetActive(true);
+        m_worldCamera.gameObject.SetActive(false);
+
+        var playerParty = m_player.GetComponent<PokemonParty>();
+        var trainerParty = trainer.GetComponent<PokemonParty>();
+
+        m_battleManager.StartTrainerBattle(playerParty, trainerParty);
     }
 
     /// <summary>
