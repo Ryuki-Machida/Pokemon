@@ -36,6 +36,8 @@ public class BattleManager : MonoBehaviour
     PlayerController player;
     TrainerController trainer;
 
+    int m_escapeAttempts;
+
     /// <summary>
     /// バトル
     /// </summary>
@@ -105,6 +107,7 @@ public class BattleManager : MonoBehaviour
             dialogBox.SetMoveNames(playerUnit.Pokemon.Moves);
         }
 
+        m_escapeAttempts = 0;
         partyScreen.Init();
         ActionSelection();
     }
@@ -209,11 +212,15 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            if (playerAction == BattleAction.SwitchPokemon)
+            if (playerAction == BattleAction.SwitchPokemon) //ポケモン選択
             {
                 var selectedPokemon = m_playerParty.Pokemons[m_currentMenber];
                 state = BattleState.Busy;
                 yield return SwitchPokemon(selectedPokemon);
+            }
+            else if (playerAction == BattleAction.Run) //逃げる選択
+            {
+                yield return TryToEscape();
             }
 
             //敵のターン
@@ -542,6 +549,7 @@ public class BattleManager : MonoBehaviour
             else if (m_currentAction == 3)
             {
                 //にげる
+                StartCoroutine(RunTurns(BattleAction.Run));
             }
         }
     }
@@ -739,5 +747,57 @@ public class BattleManager : MonoBehaviour
         yield return dialogBox.TypeDialog($"{trainer.Name}が {nextPokemon.Base.Name}を繰り出してきた！");
 
         state = BattleState.RunningTurn;
+    }
+
+    /// <summary>
+    /// 逃げれるか判断
+    /// </summary>
+    IEnumerator TryToEscape()
+    {
+        state = BattleState.Busy;
+
+        dialogBox.EnableActionSelector(false);
+        dialogBox.EnableDialogText(true);
+
+        if (isTrainerBattle)
+        {
+            dialogBox.EnableDialogText(true);
+            yield return dialogBox.TypeDialog($"トレーナと戦ってる時は逃げられない！");
+            //dialogBox.EnableDialogText(false);
+            state = BattleState.RunningTurn;
+            yield break;
+        }
+
+        ++m_escapeAttempts;
+
+        int playerSpeed = playerUnit.Pokemon.Speed;
+        int enemySpeed = enemyUnit.Pokemon.Speed;
+
+        if (enemySpeed < playerSpeed)
+        {
+            yield return dialogBox.TypeDialog($"上手く逃げれた！");
+            BattleOver(true);
+            playerUnit.GameObjectDestroy();
+            enemyUnit.GameObjectDestroy();
+        }
+        else
+        {
+            //参考計算方法 https://bulbapedia.bulbagarden.net/wiki/Escape#Generation_III_and_IV
+            float f = (playerSpeed * 128) / enemySpeed + 30 * m_escapeAttempts;
+            f = f % 256;
+
+            if (UnityEngine.Random.Range(0, 256) < f)
+            {
+                yield return dialogBox.TypeDialog($"上手く逃げれた！");
+                BattleOver(true);
+                playerUnit.GameObjectDestroy();
+                enemyUnit.GameObjectDestroy();
+            }
+            else
+            {
+                yield return dialogBox.TypeDialog($"逃げれなかった");
+                state = BattleState.RunningTurn;
+            }
+        }
     }
 }
