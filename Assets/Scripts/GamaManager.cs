@@ -16,6 +16,7 @@ public class GamaManager : MonoBehaviour
     [SerializeField] FadeManager m_fade;
 
     GameState state;
+    TrainerController m_trainerController;
 
     public static GamaManager Instance { get; private set; }
 
@@ -88,6 +89,7 @@ public class GamaManager : MonoBehaviour
         m_battleManager.gameObject.SetActive(true);
         m_worldCamera.gameObject.SetActive(false);
 
+        this.m_trainerController = trainer;
         var playerParty = m_player.GetComponent<PokemonParty>();
         var trainerParty = trainer.GetComponent<PokemonParty>();
 
@@ -99,6 +101,12 @@ public class GamaManager : MonoBehaviour
     /// </summary>
     void EndBattle(bool won)
     {
+        if (m_trainerController != null && won == true)
+        {
+            m_trainerController.BattleLost();
+            m_trainerController = null;
+        }
+
         state = GameState.FreeRoam;
         m_battleManager.gameObject.SetActive(false);
         m_worldCamera.gameObject.SetActive(true);

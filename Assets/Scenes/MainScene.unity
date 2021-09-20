@@ -3564,6 +3564,9 @@ MonoBehaviour:
   m_dialog:
     m_lines:
     - "\u52DD\u8CA0\u3060\uFF01"
+  m_dialogAfterBattle:
+    m_lines:
+    - "\u541B\u5F37\u3044\u306A"
   m_exclamation: {fileID: 480540857}
   m_fov: {fileID: 818727382}
 --- !u!114 &636537379
