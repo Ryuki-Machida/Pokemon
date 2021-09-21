@@ -33,6 +33,8 @@ public class PokemonBase : ScriptableObject
     //覚える技の数
     [SerializeField] List<LearnableMove> m_learnableMoves;
 
+    public static int MaxNumOfMoves { get; set; } = 4; //4つまでしか使えないから
+
     /// <summary>
     /// レベルのExpを取得
     /// </summary>

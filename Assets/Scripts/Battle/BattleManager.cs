@@ -445,6 +445,23 @@ public class BattleManager : MonoBehaviour
             {
                 playerUnit.Hud.SetLevel();
                 yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}のレベルが　{playerUnit.Pokemon.Level}になった！");
+
+                //新しいワザを覚える
+                var newMove = playerUnit.Pokemon.GetLearnableMoveAtCurrLevel();
+                if (newMove != null)
+                {
+                    if (playerUnit.Pokemon.Moves.Count < PokemonBase.MaxNumOfMoves)
+                    {
+                        playerUnit.Pokemon.LearnMove(newMove);
+                        yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}は　{newMove.Base.Name}を覚えた！");
+                        dialogBox.SetMoveNames(playerUnit.Pokemon.Moves);
+                    }
+                    else
+                    {
+
+                    }
+                }
+
                 yield return playerUnit.Hud.SetExpSmooth(true);
             }
 
