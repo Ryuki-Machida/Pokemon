@@ -10,28 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55fecbe447b4ece428027d02d3bc7d48, type: 3}
-  m_Name: TurtleShell
+  m_Name: TrainerSlime
   m_EditorClassIdentifier: 
-  m_name: "\u30C8\u30B2\u30BE\u30FC"
+  m_name: "\u30B9\u30E9\u30A4\u30E0"
   m_description: 
-  m_PokemonObject: {fileID: 7067962549116948203, guid: c31e5433837b9ee40b83ac718ad010be,
+  m_PokemonObject: {fileID: 4816212165209260150, guid: e9d3c38f21e9cf8488d26d2c36e6b8ea,
     type: 3}
-  type1: 3
+  type1: 2
   type2: 0
-  m_maxHp: 60
-  m_attack: 50
-  m_defense: 50
-  m_spAttack: 50
+  m_maxHp: 39
+  m_attack: 52
+  m_defense: 43
+  m_spAttack: 60
   m_spDefense: 50
-  m_speed: 45
+  m_speed: 65
   m_expYield: 60
   m_growthRate: 0
   m_learnableMoves:
-  - moveBase: {fileID: 11400000, guid: 65c7110fe7bded64a92a942e02c9ad3b, type: 2}
+  - moveBase: {fileID: 11400000, guid: 44dd5ec7ad582d8459a7b58813aec0e6, type: 2}
     level: 1
   - moveBase: {fileID: 11400000, guid: ccd752cdb62c30a4997cd5d8fff58a1e, type: 2}
     level: 1
-  - moveBase: {fileID: 11400000, guid: f8513b8196f898b4ea60828cec21eef8, type: 2}
+  - moveBase: {fileID: 11400000, guid: 7bacd6a79596b9e429060e11ec9ad0ab, type: 2}
     level: 1
   - moveBase: {fileID: 11400000, guid: 8d4c5613ea32239459d118f3379eb233, type: 2}
     level: 1

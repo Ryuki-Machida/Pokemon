@@ -45,6 +45,9 @@ public class BattleManager : MonoBehaviour
     {
         this.m_playerParty = playerParty;
         this.m_wildPokemon = wildPokemon;
+        player = playerParty.GetComponent<PlayerController>();
+        isTrainerBattle = false;
+
         StartCoroutine(SetupBattle());
     }
 
@@ -301,14 +304,7 @@ public class BattleManager : MonoBehaviour
             //受けた方のHPが0になったら
             if (targetUnit.Pokemon.HP <= 0)
             {
-                yield return dialogBox.TypeDialog($"{targetUnit.Pokemon.Base.Name}は たおれた！");
-                targetUnit.PokemonDie();
-                yield return new WaitForSeconds(1f);
-
-                targetUnit.GameObjectDestroy();
-                yield return new WaitForSeconds(2f);
-
-                CheckForBattleOver(targetUnit, sourceUnit);
+                yield return HandlePokemonFainted(targetUnit, sourceUnit);
             }
         }
         else
@@ -364,16 +360,7 @@ public class BattleManager : MonoBehaviour
         yield return sourceUnit.Hud.UpdateHP();
         if (sourceUnit.Pokemon.HP <= 0)
         {
-            yield return dialogBox.TypeDialog($"{sourceUnit.Pokemon.Base.Name}は たおれた！");
-            //倒れるアニメーション
-            sourceUnit.PokemonDie();
-            yield return new WaitForSeconds(1f);
-
-            //オブジェクトを消す
-            sourceUnit.GameObjectDestroy();
-            yield return new WaitForSeconds(2f);
-
-            CheckForBattleOver(targetUnit, sourceUnit);
+            yield return HandlePokemonFainted(sourceUnit, targetUnit);
             yield return new WaitUntil(() => state == BattleState.RunningTurn);
         }
     }
@@ -429,6 +416,45 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
+    /// ポケモンが気絶した後の処理
+    /// </summary>
+    IEnumerator HandlePokemonFainted(BattleUnit faintedUnit, BattleUnit sourceUnit)
+    {
+        yield return dialogBox.TypeDialog($"{faintedUnit.Pokemon.Base.Name}は たおれた！");
+        faintedUnit.PokemonDie();
+        yield return new WaitForSeconds(1f);
+
+        faintedUnit.GameObjectDestroy();
+        yield return new WaitForSeconds(2f);
+
+        if (!faintedUnit.IsPlayerUnit)
+        {
+            //経験値
+            //参考計算方法https://bulbapedia.bulbagarden.net/wiki/Experience#Gain_formula
+            int expYield = faintedUnit.Pokemon.Base.ExpYield;
+            int enemyLevel = faintedUnit.Pokemon.Level;
+            float trainerBonus = (isTrainerBattle) ? 1.5f : 1f; // トレーナ戦だと1.5倍
+
+            int expGain = Mathf.FloorToInt((expYield * enemyLevel * trainerBonus) / 7);
+            playerUnit.Pokemon.Exp += expGain;
+            yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}は　経験値{expGain}貰った");
+            yield return playerUnit.Hud.SetExpSmooth();
+
+            //レベルアップ
+            while (playerUnit.Pokemon.CheckForLevelUp())
+            {
+                playerUnit.Hud.SetLevel();
+                yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}のレベルが　{playerUnit.Pokemon.Level}になった！");
+                yield return playerUnit.Hud.SetExpSmooth(true);
+            }
+
+            yield return new WaitForSeconds(1f);
+        }
+
+        CheckForBattleOver(faintedUnit, sourceUnit);
+    }
+
+    /// <summary>
     /// ポケモンがパーティーに残っているか
     /// </summary>
     void CheckForBattleOver(BattleUnit faintedUnit, BattleUnit destroyUnit)
@@ -463,6 +489,8 @@ public class BattleManager : MonoBehaviour
                 {
                     BattleOver(true);
                     destroyUnit.GameObjectDestroy(); //バトルが終わったら残っている方の子オブジェクトを消す
+                    m_player.gameObject.SetActive(false);
+                    m_trainer.gameObject.SetActive(false);
                 }
             }
         }
@@ -782,7 +810,7 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            //参考計算方法 https://bulbapedia.bulbagarden.net/wiki/Escape#Generation_III_and_IV
+            //参考計算方法https://bulbapedia.bulbagarden.net/wiki/Escape#Generation_III_and_IV
             float f = (playerSpeed * 128) / enemySpeed + 30 * m_escapeAttempts;
             f = f % 256;
 

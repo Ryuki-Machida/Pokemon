@@ -8,14 +8,18 @@ public class Pokemon
 {
     [SerializeField] PokemonBase _base;
     [SerializeField] int level;
+
     public PokemonBase Base
     {
         get { return _base; }
     }
+
     public int Level
     {
         get { return level; }
     }
+
+    public int Exp { get; set; }
 
     public int HP { get; set; }
 
@@ -54,9 +58,12 @@ public class Pokemon
                 break;
         }
 
+        Exp = Base.GetExpForLevel(Level);
+
         CalculateStats();
         HP = MaxHp;
 
+        StatusChanges = new Queue<string>();
         ResetStatBoost();
         Status = null;
         VolatileStatus = null;
@@ -142,6 +149,20 @@ public class Pokemon
 
             Debug.Log($"{stat}が{StatBoosts[stat]}された");
         }
+    }
+
+    /// <summary>
+    /// レベルが上がったか確認
+    /// </summary>
+    public bool CheckForLevelUp()
+    {
+        if (Exp > Base.GetExpForLevel(level + 1))
+        {
+            ++level;
+            return true;
+        }
+
+        return false;
     }
 
     public int Attack

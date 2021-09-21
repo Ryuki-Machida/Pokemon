@@ -26,8 +26,29 @@ public class PokemonBase : ScriptableObject
     [SerializeField] int m_spDefense;
     [SerializeField] int m_speed;
 
+    /// <summary>貰える経験値<summary>
+    [SerializeField] int m_expYield;
+    [SerializeField] GrowthRate m_growthRate;
+
     //覚える技の数
     [SerializeField] List<LearnableMove> m_learnableMoves;
+
+    /// <summary>
+    /// レベルのExpを取得
+    /// </summary>
+    public int GetExpForLevel(int level)
+    {
+        if (m_growthRate == GrowthRate.Fast)
+        {
+            return 4 * (level * level * level) / 5;
+        }
+        else if (m_growthRate == GrowthRate.MediumFast)
+        {
+            return level * level * level;
+        }
+
+        return -1;
+    }
 
     public string Name
     {
@@ -88,6 +109,16 @@ public class PokemonBase : ScriptableObject
     {
         get { return m_learnableMoves; }
     }
+
+    public int ExpYield
+    {
+        get { return m_expYield; }
+    }
+
+    public GrowthRate GrowthRate
+    {
+        get { return m_growthRate; }
+    }
 }
 
 /// <summary>
@@ -131,6 +162,14 @@ public enum PokemonType
     Rock,
     Ghost,
     Doragon,
+}
+
+/// <summary>
+/// 成長速度
+/// </summary>
+public enum GrowthRate
+{
+    Fast, MediumFast //トレーナ or 野生か
 }
 
 /// <summary>

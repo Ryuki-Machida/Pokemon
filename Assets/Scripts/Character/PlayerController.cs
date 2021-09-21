@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] string m_name;
 
+    const float m_offsetY = 0.3f;
+
     public event Action OnEncountered;
     public event Action<Collider2D> OnTrainersView;
 
@@ -67,7 +69,7 @@ public class PlayerController : MonoBehaviour
 
     void CheckForEncounters()
     {
-        if (Physics2D.OverlapCircle(transform.position, 0.2f, GameLayers.gl.GrassLayer) != null)
+        if (Physics2D.OverlapCircle(transform.position - new Vector3(0, m_offsetY), 0.2f, GameLayers.gl.GrassLayer) != null)
         {
             if (UnityEngine.Random.Range(1, 50) <= 10) // 1マスごとにランダムで取得
             {
@@ -79,7 +81,7 @@ public class PlayerController : MonoBehaviour
 
     void CheckTrainersView()
     {
-        var collider = Physics2D.OverlapCircle(transform.position, 0.2f, GameLayers.gl.FovLayer);
+        var collider = Physics2D.OverlapCircle(transform.position - new Vector3(0, m_offsetY), 0.2f, GameLayers.gl.FovLayer);
         if (collider != null)
         {
             m_character.Animator.IsMoving = false;
