@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState { FreeRoam, Battle, Dialog, Menu, Cutscene }
+public enum GameState { FreeRoam, Battle, Dialog, Menu, Bag, Cutscene }
 
 public class GamaManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class GamaManager : MonoBehaviour
     [SerializeField] Camera m_worldCamera;
     /// <summary>Script</summary>
     [SerializeField] FadeManager m_fade;
+    [SerializeField] InventoryUI m_inventoryUI;
 
     GameState state;
     TrainerController m_trainerController;
@@ -146,19 +148,28 @@ public class GamaManager : MonoBehaviour
         {
             m_menuController.HandleUpdate();
         }
+        else if (state == GameState.Bag)
+        {
+            Action onBack = () =>
+            {
+                m_inventoryUI.gameObject.SetActive(false);
+                state = GameState.FreeRoam;
+            };
+
+            m_inventoryUI.HandleUpdate(onBack);
+        }
     }
 
+    /// <summary>
+    /// メニュー
+    /// </summary>
     void OnMenuSelected(int selectedItem)
     {
         if (selectedItem == 0)
         {
-            //モンスター
-        }
-        else if (selectedItem == 1)
-        {
             //バック
+            m_inventoryUI.gameObject.SetActive(true);
+            state = GameState.Bag;
         }
-
-        state = GameState.FreeRoam;
     }
 }

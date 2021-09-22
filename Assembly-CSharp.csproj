@@ -90,6 +90,10 @@
     <Compile Include="Assets\Scripts\Gameplay\GlobalSettings.cs" />
     <Compile Include="Assets\Scripts\Gameplay\Interactable.cs" />
     <Compile Include="Assets\Scripts\Gameplay\MapArea.cs" />
+    <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
+    <Compile Include="Assets\Scripts\Inventory\ItemBase.cs" />
+    <Compile Include="Assets\Scripts\Inventory\ItemSlotUI.cs" />
+    <Compile Include="Assets\Scripts\Inventory\RecoveryItem.cs" />
     <Compile Include="Assets\Scripts\MenuController.cs" />
     <Compile Include="Assets\Scripts\Pokemon\Condition.cs" />
     <Compile Include="Assets\Scripts\Pokemon\Move.cs" />
@@ -98,6 +102,7 @@
     <Compile Include="Assets\Scripts\Pokemon\PokemonBase.cs" />
     <Compile Include="Assets\Scripts\Pokemon\PokemonParty.cs" />
     <Compile Include="Assets\Scripts\SpriteAnimator.cs" />
+    <Compile Include="Assets\Scripts\UI\InventoryUI.cs" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_akarami_blend.shader" />
     <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_hair_ds.shader" />
