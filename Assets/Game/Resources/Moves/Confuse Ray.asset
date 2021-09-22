@@ -17,7 +17,7 @@ MonoBehaviour:
   m_type: 14
   m_TypeColor: {r: 0.17769313, g: 0.0022249965, b: 0.4716981, a: 1}
   m_power: 0
-  m_accuracy: 50
+  m_accuracy: 100
   m_alwaysHits: 0
   m_pp: 20
   m_priority: 0

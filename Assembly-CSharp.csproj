@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\Battle\BattleManager.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleUnit.cs" />
     <Compile Include="Assets\Scripts\Battle\HPBar.cs" />
+    <Compile Include="Assets\Scripts\Battle\MoveSelectionUI.cs" />
     <Compile Include="Assets\Scripts\Battle\PartyMemberUI.cs" />
     <Compile Include="Assets\Scripts\Battle\PartyScreen.cs" />
     <Compile Include="Assets\Scripts\Character\Character.cs" />

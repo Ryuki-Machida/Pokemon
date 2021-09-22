@@ -24,7 +24,7 @@ MonoBehaviour:
   m_spAttack: 60
   m_spDefense: 50
   m_speed: 65
-  m_expYield: 200
+  m_expYield: 400
   m_growthRate: 1
   m_learnableMoves:
   - moveBase: {fileID: 11400000, guid: 44dd5ec7ad582d8459a7b58813aec0e6, type: 2}

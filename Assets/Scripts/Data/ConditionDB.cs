@@ -31,8 +31,8 @@ public class ConditionDB : MonoBehaviour
                 StartMessge = "は　どくをうけた",
                 OnAfterTurn = (Pokemon pokemon) =>
                 {
-                    pokemon.UpdateHP(pokemon.MaxHp / 8);
                     pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　どくのダメージをうけている");
+                    pokemon.UpdateHP(pokemon.MaxHp / 8);
                 }
             }
         },
@@ -44,8 +44,8 @@ public class ConditionDB : MonoBehaviour
                 StartMessge = "は　やけどをおった",
                 OnAfterTurn = (Pokemon pokemon) =>
                 {
-                    pokemon.UpdateHP(pokemon.MaxHp / 10);
                     pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　やけどのダメージをうけている");
+                    pokemon.UpdateHP(pokemon.MaxHp / 16);
                 }
             }
         },

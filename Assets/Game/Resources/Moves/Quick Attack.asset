@@ -19,7 +19,7 @@ MonoBehaviour:
   m_power: 40
   m_accuracy: 100
   m_alwaysHits: 0
-  m_pp: 20
+  m_pp: 10
   m_priority: 1
   m_category: 0
   m_effects:
