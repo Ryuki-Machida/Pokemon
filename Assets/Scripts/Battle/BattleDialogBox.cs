@@ -28,6 +28,13 @@ public class BattleDialogBox : MonoBehaviour
     [SerializeField] Image m_yesImage;
     [SerializeField] Image m_noImage;
 
+    Color m_highlightedColor;
+
+    private void Start()
+    {
+        m_highlightedColor = GlobalSettings.i.HighlightedColor;
+    }
+
     public void SetDialog(string dialog)
     {
         m_dialogText.text = dialog;
@@ -73,6 +80,9 @@ public class BattleDialogBox : MonoBehaviour
         m_moveDetails.SetActive(enabled);
     }
 
+    /// <summary>
+    /// 交換するかの表示、非表示
+    /// </summary>
     public void EndbleChoiceBox(bool enabled)
     {
         m_choicBox.SetActive(enabled);

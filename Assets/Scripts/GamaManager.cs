@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState { FreeRoam, Battle, Dialog, Cutscene }
+public enum GameState { FreeRoam, Battle, Dialog, Menu, Cutscene }
 
 public class GamaManager : MonoBehaviour
 {
@@ -17,12 +17,15 @@ public class GamaManager : MonoBehaviour
 
     GameState state;
     TrainerController m_trainerController;
+    MenuController m_menuController;
 
     public static GamaManager Instance { get; private set; }
 
     private void Awake()
     {
         Instance = this;
+        m_menuController = GetComponent<MenuController>();
+
         ConditionDB.Init();
     }
 
@@ -53,6 +56,13 @@ public class GamaManager : MonoBehaviour
                 state = GameState.FreeRoam;
             }
         };
+
+        m_menuController.onBack += () =>
+        {
+            state = GameState.FreeRoam;
+        };
+
+        m_menuController.onMenuSelected += OnMenuSelected;
     }
 
     /// <summary>
@@ -117,6 +127,12 @@ public class GamaManager : MonoBehaviour
         if (state == GameState.FreeRoam)
         {
             m_player.HandleUpdate();
+
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                m_menuController.OpenMenu();
+                state = GameState.Menu;
+            }
         }
         else if (state == GameState.Battle)
         {
@@ -126,5 +142,23 @@ public class GamaManager : MonoBehaviour
         {
             DialogManager.Instance.HandleUpdate();
         }
+        else if (state == GameState.Menu)
+        {
+            m_menuController.HandleUpdate();
+        }
+    }
+
+    void OnMenuSelected(int selectedItem)
+    {
+        if (selectedItem == 0)
+        {
+            //モンスター
+        }
+        else if (selectedItem == 1)
+        {
+            //バック
+        }
+
+        state = GameState.FreeRoam;
     }
 }

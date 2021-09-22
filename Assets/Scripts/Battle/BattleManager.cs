@@ -162,6 +162,7 @@ public class BattleManager : MonoBehaviour
     IEnumerator AboutToUse(Pokemon newPokemon)
     {
         state = BattleState.Busy;
+        dialogBox.EnableDialogText(true);
         yield return dialogBox.TypeDialog($"{trainer.Name}は　{newPokemon.Base.Name}を出そうとしている。　交換しますか？");
 
         state = BattleState.AboutToUse;
@@ -489,7 +490,7 @@ public class BattleManager : MonoBehaviour
                 yield return playerUnit.Hud.SetExpSmooth(true);
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
         }
 
         CheckForBattleOver(faintedUnit, sourceUnit);
