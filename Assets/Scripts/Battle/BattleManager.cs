@@ -16,6 +16,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] PartyScreen partyScreen;
     [SerializeField] MoveSelectionUI moveSelectionUI;
     [SerializeField] InventoryUI inventoryUI;
+    [SerializeField] BattleCamera battleCamera;
 
     [SerializeField] GameObject m_PlayerHud;
     [SerializeField] GameObject m_EnemyHud;
@@ -79,13 +80,18 @@ public class BattleManager : MonoBehaviour
 
         if (!isTrainerBattle)  //野生のポケモンバトル
         {
+            m_player.gameObject.SetActive(true);
+
             playerUnit.Setup(m_playerParty.GetHealthyPokemon());
             enemyUnit.Setup(m_wildPokemon);
 
             m_EnemyHud.SetActive(true);
             dialogBox.SetMoveNames(playerUnit.Pokemon.Moves);
 
+            battleCamera.EnemyCamera();
             yield return dialogBox.TypeDialog($"あっ！　野生の{enemyUnit.Pokemon.Base.Name}　が飛び出して来た！");
+            yield return new WaitForSeconds(0.2f);
+            battleCamera.PlayerCamera();
             yield return dialogBox.TypeDialog($"ゆけっ！　{playerUnit.Pokemon.Base.Name}！");
             yield return new WaitForSeconds(1f);
         }
@@ -97,6 +103,7 @@ public class BattleManager : MonoBehaviour
             m_player.gameObject.SetActive(true);
             m_trainer.gameObject.SetActive(true);
 
+            battleCamera.EnemyCamera();
             yield return dialogBox.TypeDialog($"{trainer.Name}が 勝負を仕掛けてきた！");
 
             //トレーナーの最初のポケモン
@@ -106,11 +113,13 @@ public class BattleManager : MonoBehaviour
             yield return dialogBox.TypeDialog($"{trainer.Name}が {enemyPokemon.Base.Name}を繰り出してきた！");
 
             //プレイヤーの最初のポケモン
+            battleCamera.PlayerCamera();
             playerUnit.gameObject.SetActive(true);
             var playerPokemon = m_playerParty.GetHealthyPokemon();
             playerUnit.Setup(playerPokemon);
             yield return dialogBox.TypeDialog($"行け！ {playerPokemon.Base.Name}！");
             dialogBox.SetMoveNames(playerUnit.Pokemon.Moves);
+            yield return new WaitForSeconds(1f);
         }
 
         m_escapeAttempts = 0;
@@ -133,6 +142,7 @@ public class BattleManager : MonoBehaviour
         state = BattleState.ActionSelection;
         dialogBox.EnableActionSelector(true);
         dialogBox.EnableDialogText(false);
+        battleCamera.MoveingCamera();
     }
 
     /// <summary>
@@ -191,6 +201,7 @@ public class BattleManager : MonoBehaviour
     private IEnumerator RunTurns(BattleAction playerAction)
     {
         state = BattleState.RunningTurn;
+        battleCamera.BattlePlayCamera();
 
         if (playerAction == BattleAction.Move)
         {

@@ -68,12 +68,14 @@
     <Compile Include="Assets\Fade\Scripts\FadeImage.cs" />
     <Compile Include="Assets\Fade\Scripts\FadeUI.cs" />
     <Compile Include="Assets\Fade\Scripts\IFade.cs" />
+    <Compile Include="Assets\Scripts\Battle\BattleCamera.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleDialogBox.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleHud.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleManager.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleUnit.cs" />
     <Compile Include="Assets\Scripts\Battle\HPBar.cs" />
     <Compile Include="Assets\Scripts\Battle\MoveSelectionUI.cs" />
+    <Compile Include="Assets\Scripts\Battle\Moving.cs" />
     <Compile Include="Assets\Scripts\Battle\PartyMemberUI.cs" />
     <Compile Include="Assets\Scripts\Battle\PartyScreen.cs" />
     <Compile Include="Assets\Scripts\Character\Character.cs" />
