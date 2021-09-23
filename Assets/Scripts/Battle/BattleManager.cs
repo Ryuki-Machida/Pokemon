@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public enum BattleState { Start, ActionSelection, MoveSelection, RunningTurn, Busy, PartyScreen, AboutToUse, MoveToForget , BattleOver }
+public enum BattleState { Start, ActionSelection, MoveSelection, RunningTurn, Busy, Bag, PartyScreen, AboutToUse, MoveToForget , BattleOver }
 
 public enum BattleAction { Move, SwitchPokemon, UseItem, Run }
 
@@ -15,6 +15,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] BattleDialogBox dialogBox;
     [SerializeField] PartyScreen partyScreen;
     [SerializeField] MoveSelectionUI moveSelectionUI;
+    [SerializeField] InventoryUI inventoryUI;
 
     [SerializeField] GameObject m_PlayerHud;
     [SerializeField] GameObject m_EnemyHud;
@@ -117,7 +118,7 @@ public class BattleManager : MonoBehaviour
         ActionSelection();
     }
 
-    void BattleOver(bool won)
+    private void BattleOver(bool won)
     {
         state = BattleState.BattleOver;
         m_playerParty.Pokemons.ForEach(p => p.OnBattleOver());
@@ -125,9 +126,9 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 攻撃を選択してるとき
+    /// 行動を選択してるとき
     /// </summary>
-    void ActionSelection()
+    private void ActionSelection()
     {
         state = BattleState.ActionSelection;
         dialogBox.EnableActionSelector(true);
@@ -137,7 +138,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// ポケモンを選択してるとき
     /// </summary>
-    void OpenPartySelection()
+    private void OpenPartySelection()
     {
         partyScreen.CalledFrom = state;
         state = BattleState.PartyScreen;
@@ -145,10 +146,16 @@ public class BattleManager : MonoBehaviour
         dialogBox.EnableActionSelector(false);
     }
 
+    private void OpenBag()
+    {
+        state = BattleState.Bag;
+        inventoryUI.gameObject.SetActive(true);
+    }
+
     /// <summary>
     /// わざを選択しているとき
     /// </summary>
-    void MoveSelection()
+    private void MoveSelection()
     {
         state = BattleState.MoveSelection;
         dialogBox.EnableActionSelector(false);
@@ -158,10 +165,9 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// トレーナが次のポケモンを出す前に
     /// </summary>
-    IEnumerator AboutToUse(Pokemon newPokemon)
+    private IEnumerator AboutToUse(Pokemon newPokemon)
     {
         state = BattleState.Busy;
-        dialogBox.EnableDialogText(true);
         yield return dialogBox.TypeDialog($"{trainer.Name}は　{newPokemon.Base.Name}を出そうとしている。　交換しますか？");
 
         state = BattleState.AboutToUse;
@@ -171,7 +177,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// わざを入れ替える
     /// </summary>
-    IEnumerator ChooseMoveToForget(Pokemon pokemon, MoveBase newMove)
+    private IEnumerator ChooseMoveToForget(Pokemon pokemon, MoveBase newMove)
     {
         state = BattleState.Busy;
         yield return dialogBox.TypeDialog($"忘れさせたいワザを選んでください");
@@ -182,7 +188,7 @@ public class BattleManager : MonoBehaviour
         state = BattleState.MoveToForget;
     }
 
-    IEnumerator RunTurns(BattleAction playerAction)
+    private IEnumerator RunTurns(BattleAction playerAction)
     {
         state = BattleState.RunningTurn;
 
@@ -223,6 +229,7 @@ public class BattleManager : MonoBehaviour
                 //2番目のターン
                 yield return RunMove(secondUnit, firstUnit, secondUnit.Pokemon.CurrentMove);
                 yield return RunAfterTurn(secondUnit, firstUnit);
+                yield return new WaitForSeconds(0.1f);
                 yield return RunAfterTurn(firstUnit, secondUnit);
                 if (state == BattleState.BattleOver)
                 {
@@ -238,6 +245,11 @@ public class BattleManager : MonoBehaviour
                 state = BattleState.Busy;
                 yield return SwitchPokemon(selectedPokemon);
             }
+            else if (playerAction == BattleAction.UseItem)
+            {
+                //アイテム画面から処理するので、何もせずに敵の移動にスキップする
+                dialogBox.EnableActionSelector(false);
+            }
             else if (playerAction == BattleAction.Run) //逃げる選択
             {
                 yield return TryToEscape();
@@ -247,6 +259,7 @@ public class BattleManager : MonoBehaviour
             var enemyMove = enemyUnit.Pokemon.GetRandomMove();
             yield return RunMove(enemyUnit, playerUnit, enemyMove);
             yield return RunAfterTurn(enemyUnit, playerUnit);
+            yield return new WaitForSeconds(0.1f);
             yield return RunAfterTurn(playerUnit, enemyUnit);
             if (state == BattleState.BattleOver)
             {
@@ -263,14 +276,14 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 戦闘の中身の処理
     /// </summary>
-    IEnumerator RunMove(BattleUnit sourceUnit, BattleUnit targetUnit, Move move)
+    private IEnumerator RunMove(BattleUnit sourceUnit, BattleUnit targetUnit, Move move)
     {
         dialogBox.EnableDialogText(true);
         bool canRunMove = sourceUnit.Pokemon.OnBeforeMove();
         if (!canRunMove)
         {
             yield return ShowStatusChanges(sourceUnit.Pokemon);
-            yield return sourceUnit.Hud.UpdateHP();
+            yield return sourceUnit.Hud.WaitForHPUpdate();
             yield break;
         }
         yield return ShowStatusChanges(sourceUnit.Pokemon);
@@ -300,7 +313,7 @@ public class BattleManager : MonoBehaviour
             else
             {
                 var damageDetails = targetUnit.Pokemon.TakeDamage(move, sourceUnit.Pokemon);
-                yield return targetUnit.Hud.UpdateHP();
+                yield return targetUnit.Hud.WaitForHPUpdate();
 
                 dialogBox.EnableDialogText(true);
 
@@ -329,11 +342,10 @@ public class BattleManager : MonoBehaviour
         {
             dialogBox.EnableDialogText(true);
             yield return dialogBox.TypeDialog($"{targetUnit.Pokemon.Base.Name}には 攻撃が当たらなかった");
-            dialogBox.EnableDialogText(false);
         }
     }
 
-    IEnumerator RunMoveEffects(MoveEffects effects, Pokemon source, Pokemon target, MoveTarget moveTarget)
+    private IEnumerator RunMoveEffects(MoveEffects effects, Pokemon source, Pokemon target, MoveTarget moveTarget)
     {
         //ステータス
         if (effects.Boosts != null)
@@ -364,7 +376,7 @@ public class BattleManager : MonoBehaviour
         yield return ShowStatusChanges(target);
     }
 
-    IEnumerator RunAfterTurn(BattleUnit sourceUnit, BattleUnit targetUnit)
+    private IEnumerator RunAfterTurn(BattleUnit sourceUnit, BattleUnit targetUnit)
     {
         if (state == BattleState.BattleOver)
         {
@@ -376,19 +388,18 @@ public class BattleManager : MonoBehaviour
         dialogBox.EnableDialogText(true);
         sourceUnit.Pokemon.OnAfterTurn();
         yield return ShowStatusChanges(sourceUnit.Pokemon);
-        yield return sourceUnit.Hud.UpdateHP();
+        yield return sourceUnit.Hud.WaitForHPUpdate();
         if (sourceUnit.Pokemon.HP <= 0)
         {
             yield return HandlePokemonFainted(sourceUnit, targetUnit);
             yield return new WaitUntil(() => state == BattleState.RunningTurn);
         }
-        dialogBox.EnableDialogText(false);
     }
 
     /// <summary>
     /// 命中率
     /// </summary>
-    bool CheckIfMoveHits(Move move, Pokemon source, Pokemon target)
+    private bool CheckIfMoveHits(Move move, Pokemon source, Pokemon target)
     {
         if (move.Base.AlwaysHits)
         {
@@ -426,7 +437,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// ステータスの変更を表示
     /// </summary>
-    IEnumerator ShowStatusChanges(Pokemon pokemon)
+    private IEnumerator ShowStatusChanges(Pokemon pokemon)
     {
         while (pokemon.StatusChanges.Count > 0)
         {
@@ -438,7 +449,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// ポケモンが気絶した後の処理
     /// </summary>
-    IEnumerator HandlePokemonFainted(BattleUnit faintedUnit, BattleUnit sourceUnit)
+    private IEnumerator HandlePokemonFainted(BattleUnit faintedUnit, BattleUnit sourceUnit)
     {
         yield return dialogBox.TypeDialog($"{faintedUnit.Pokemon.Base.Name}は たおれた！");
         faintedUnit.PokemonDie();
@@ -493,12 +504,13 @@ public class BattleManager : MonoBehaviour
         }
 
         CheckForBattleOver(faintedUnit, sourceUnit);
+        yield return new WaitUntil(() => state == BattleState.RunningTurn);
     }
 
     /// <summary>
     /// ポケモンがパーティーに残っているか
     /// </summary>
-    void CheckForBattleOver(BattleUnit faintedUnit, BattleUnit destroyUnit)
+    private void CheckForBattleOver(BattleUnit faintedUnit, BattleUnit destroyUnit)
     {
         if (faintedUnit.IsPlayerUnit)
         {
@@ -540,7 +552,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 与えたわざのタイプ相性によってtextの文字を変える
     /// </summary>
-    IEnumerator ShowDamageDetails(DamageDetails damageDetails)
+    private IEnumerator ShowDamageDetails(DamageDetails damageDetails)
     {
         if (damageDetails.Critical > 1f)
         {
@@ -569,6 +581,23 @@ public class BattleManager : MonoBehaviour
         else if (state == BattleState.PartyScreen)
         {
             HandlePartySelection();
+        }
+        else if (state == BattleState.Bag)
+        {
+            Action onBack = () =>
+            {
+                inventoryUI.gameObject.SetActive(false);
+                state = BattleState.ActionSelection;
+            };
+
+            Action onItemUsed = () =>
+            {
+                state = BattleState.Busy;
+                inventoryUI.gameObject.SetActive(false);
+                StartCoroutine(RunTurns(BattleAction.UseItem));
+            };
+
+            inventoryUI.HandleUpdate(onBack, onItemUsed);
         }
         else if (state == BattleState.AboutToUse)
         {
@@ -604,7 +633,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 行動選択中の処理
     /// </summary>
-    void HandleActionSelection()
+    private void HandleActionSelection()
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
@@ -638,6 +667,7 @@ public class BattleManager : MonoBehaviour
             else if (m_currentAction == 2)
             {
                 //バック
+                OpenBag();
             }
             else if (m_currentAction == 3)
             {
@@ -650,7 +680,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// たたかうを選択した場合の処理
     /// </summary>
-    void HandleMoveSelection()
+    private void HandleMoveSelection()
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
@@ -694,7 +724,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// Pokemonを選択した場合の処理
     /// </summary>
-    void HandlePartySelection()
+    private void HandlePartySelection()
     {
         Action onSelected = () =>
         {
@@ -754,7 +784,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 次のポケモンが出る前にポケモンを交換するか
     /// </summary>
-    void HandleAboutToUse()
+    private void HandleAboutToUse()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
@@ -787,7 +817,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// ポケモンを入れ替える時の処理
     /// </summary>
-    IEnumerator SwitchPokemon(Pokemon newPokemon, bool isTrainerAboutToUse = false)
+    private IEnumerator SwitchPokemon(Pokemon newPokemon, bool isTrainerAboutToUse = false)
     {
         if (playerUnit.Pokemon.HP > 0)
         {
@@ -814,7 +844,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// トレーナーが次のポケモンを繰り出すとき
     /// </summary>
-    IEnumerator SendNextTrainerPokemon()
+    private IEnumerator SendNextTrainerPokemon()
     {
         state = BattleState.Busy;
 
@@ -828,7 +858,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 逃げれるか判断
     /// </summary>
-    IEnumerator TryToEscape()
+    private IEnumerator TryToEscape()
     {
         state = BattleState.Busy;
 
@@ -837,9 +867,7 @@ public class BattleManager : MonoBehaviour
 
         if (isTrainerBattle)
         {
-            dialogBox.EnableDialogText(true);
             yield return dialogBox.TypeDialog($"トレーナと戦ってる時は逃げられない！");
-            //dialogBox.EnableDialogText(false);
             state = BattleState.RunningTurn;
             yield break;
         }

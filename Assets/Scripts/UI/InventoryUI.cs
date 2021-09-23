@@ -23,6 +23,8 @@ public class InventoryUI : MonoBehaviour
     int m_selectedItem = 0;
     InventoryUIState state;
 
+    Action onItemUsed;
+
     List<ItemSlotUI> m_slotUIList;
     Inventory m_inventory;
 
@@ -64,8 +66,10 @@ public class InventoryUI : MonoBehaviour
     /// <summary>
     /// バックの操作方法
     /// </summary>
-    public void HandleUpdate(Action onBack)
+    public void HandleUpdate(Action onBack, Action onItemUsed = null)
     {
+        this.onItemUsed = onItemUsed;
+
         if (state == InventoryUIState.ItemSelection)
         {
             //バック
@@ -124,6 +128,7 @@ public class InventoryUI : MonoBehaviour
         if (usedItem != null)
         {
             yield return DialogManager.Instance.ShowDialogText($"{usedItem.Name}を使った");
+            onItemUsed?.Invoke();
         }
         else
         {
