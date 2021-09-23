@@ -34,6 +34,8 @@ public class InventoryUI : MonoBehaviour
     private void Start()
     {
         UpdateItemList();
+
+        m_inventory.OnUpdated += UpdateItemList;
     }
 
     /// <summary>
@@ -99,7 +101,7 @@ public class InventoryUI : MonoBehaviour
             //パーティー画面
             Action onselected = () =>
             {
-
+                StartCoroutine(UseItem());
             };
 
             Action onBackPartyScreen = () =>
@@ -109,6 +111,26 @@ public class InventoryUI : MonoBehaviour
 
             m_partyScreen.HandleUpdate(onselected, onBackPartyScreen);
         }
+    }
+
+    /// <summary>
+    /// アイテムを使うときのtext
+    /// </summary>
+    IEnumerator UseItem()
+    {
+        state = InventoryUIState.Busy;
+
+        var usedItem = m_inventory.UseItem(m_selectedItem, m_partyScreen.SelectedMember);
+        if (usedItem != null)
+        {
+            yield return DialogManager.Instance.ShowDialogText($"{usedItem.Name}を使った");
+        }
+        else
+        {
+            yield return DialogManager.Instance.ShowDialogText($"使っても効果ありません");
+        }
+
+        ClosePartyScreen();
     }
 
     /// <summary>

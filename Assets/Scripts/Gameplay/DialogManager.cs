@@ -28,6 +28,24 @@ public class DialogManager : MonoBehaviour
         Instance = this;
     }
 
+    /// <summary>
+    /// アイテム使用したときに表示する
+    /// </summary>
+    public IEnumerator ShowDialogText(string text, bool waitForInput = true)
+    {
+        IsShowing = true;
+        m_dialogBox.SetActive(true);
+
+        yield return TypeDialog(text);
+        if (waitForInput)
+        {
+            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
+        }
+
+        m_dialogBox.SetActive(false);
+        IsShowing = false;
+    }
+
     public IEnumerator ShowDialog(Dialog dialog, Action onFinish = null)
     {
         yield return new WaitForEndOfFrame();

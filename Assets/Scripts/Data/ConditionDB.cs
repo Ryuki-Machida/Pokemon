@@ -32,7 +32,7 @@ public class ConditionDB : MonoBehaviour
                 OnAfterTurn = (Pokemon pokemon) =>
                 {
                     pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　どくのダメージをうけている");
-                    pokemon.UpdateHP(pokemon.MaxHp / 8);
+                    pokemon.DecreaseHP(pokemon.MaxHp / 8);
                 }
             }
         },
@@ -45,7 +45,7 @@ public class ConditionDB : MonoBehaviour
                 OnAfterTurn = (Pokemon pokemon) =>
                 {
                     pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　やけどのダメージをうけている");
-                    pokemon.UpdateHP(pokemon.MaxHp / 8);
+                    pokemon.DecreaseHP(pokemon.MaxHp / 8);
                 }
             }
         },
@@ -147,7 +147,7 @@ public class ConditionDB : MonoBehaviour
 
                     //こんらんによってダメージを受ける
                     pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　こんらんしている");
-                    pokemon.UpdateHP(pokemon.MaxHp / 8);
+                    pokemon.DecreaseHP(pokemon.MaxHp / 8);
                     pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　自分を攻撃した");
                     return false;
                 }
