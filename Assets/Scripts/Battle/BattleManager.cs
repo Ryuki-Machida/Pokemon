@@ -141,7 +141,6 @@ public class BattleManager : MonoBehaviour
     {
         partyScreen.CalledFrom = state;
         state = BattleState.PartyScreen;
-        partyScreen.SetPartyData(m_playerParty.Pokemons);
         partyScreen.gameObject.SetActive(true);
         dialogBox.EnableActionSelector(false);
     }

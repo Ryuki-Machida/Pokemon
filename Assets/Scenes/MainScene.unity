@@ -13855,6 +13855,7 @@ MonoBehaviour:
     type: 3}
   m_itemIcon: {fileID: 1253240653}
   m_itemDescription: {fileID: 41433750}
+  m_partyScreen: {fileID: 1178088086}
 --- !u!1 &1706377167
 GameObject:
   m_ObjectHideFlags: 0
@@ -14754,6 +14755,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 654411556}
     m_Modifications:
+    - target: {fileID: 154800809627407540, guid: ff7a49b72908b3f41bb3f26c22aa238f,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8293559559895036522, guid: ff7a49b72908b3f41bb3f26c22aa238f,
         type: 3}
       propertyPath: m_AnchorMax.y

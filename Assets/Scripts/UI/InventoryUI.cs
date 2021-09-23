@@ -7,6 +7,9 @@ using UnityEngine.UI;
 /// <summary>
 /// バックの管理
 /// </summary>
+
+public enum InventoryUIState { ItemSelection, PartySelection, Busy }
+
 public class InventoryUI : MonoBehaviour
 {
     [SerializeField] GameObject m_itemList;
@@ -15,7 +18,10 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] Image m_itemIcon;
     [SerializeField] Text m_itemDescription;
 
+    [SerializeField] PartyScreen m_partyScreen;
+
     int m_selectedItem = 0;
+    InventoryUIState state;
 
     List<ItemSlotUI> m_slotUIList;
     Inventory m_inventory;
@@ -30,6 +36,9 @@ public class InventoryUI : MonoBehaviour
         UpdateItemList();
     }
 
+    /// <summary>
+    /// アイテムの更新
+    /// </summary>
     void UpdateItemList()
     {
         //既存のアイテムをすべてきれいする
@@ -55,27 +64,50 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     public void HandleUpdate(Action onBack)
     {
-        int prevSelection = m_selectedItem;
-
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (state == InventoryUIState.ItemSelection)
         {
-            ++m_selectedItem;
+            //バック
+            int prevSelection = m_selectedItem;
+
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                ++m_selectedItem;
+            }
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                --m_selectedItem;
+            }
+
+            m_selectedItem = Mathf.Clamp(m_selectedItem, 0, m_inventory.Slots.Count - 1);
+
+            if (prevSelection != m_selectedItem)
+            {
+                UpdateItemSelection();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                OpenPartyScreen();
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                onBack?.Invoke();
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (state == InventoryUIState.PartySelection)
         {
-            --m_selectedItem;
-        }
+            //パーティー画面
+            Action onselected = () =>
+            {
 
-        m_selectedItem = Mathf.Clamp(m_selectedItem, 0, m_inventory.Slots.Count - 1);
+            };
 
-        if (prevSelection != m_selectedItem)
-        {
-            UpdateItemSelection();
-        }
+            Action onBackPartyScreen = () =>
+            {
+                ClosePartyScreen();
+            };
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            onBack?.Invoke();
+            m_partyScreen.HandleUpdate(onselected, onBackPartyScreen);
         }
     }
 
@@ -99,5 +131,23 @@ public class InventoryUI : MonoBehaviour
         var item = m_inventory.Slots[m_selectedItem].Item;
         m_itemIcon.sprite = item.Icon;
         m_itemDescription.text = item.Description;
+    }
+
+    /// <summary>
+    /// アイテムを選択したらパーティー画面
+    /// </summary>
+    void OpenPartyScreen()
+    {
+        state = InventoryUIState.PartySelection;
+        m_partyScreen.gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// アイテム画面に戻る
+    /// </summary>
+    void ClosePartyScreen()
+    {
+        state = InventoryUIState.ItemSelection;
+        m_partyScreen.gameObject.SetActive(false);
     }
 }

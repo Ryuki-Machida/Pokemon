@@ -187,7 +187,6 @@ public class GamaManager : MonoBehaviour
         {
             //モンスター
             m_partyScreen.gameObject.SetActive(true);
-            m_partyScreen.SetPartyData(m_player.GetComponent<PokemonParty>().Pokemons);
             state = GameState.PartyScreen;
         }
         else if (selectedItem == 1)

@@ -12,6 +12,7 @@ public class PartyScreen : MonoBehaviour
     PartyMemberUI[] m_memberSlots;
     /// <summary>ボックス内のポケモン</summary>
     List<Pokemon> m_pokemons;
+    PokemonParty m_party;
 
     int m_selection = 0;
 
@@ -28,20 +29,25 @@ public class PartyScreen : MonoBehaviour
     public void Init()
     {
         m_memberSlots = GetComponentsInChildren<PartyMemberUI>();
+
+        m_party = PokemonParty.GetPlayerParty();
+        SetPartyData();
+
+        m_party.OnUpdated += SetPartyData;
     }
 
     /// <summary>
     /// ボックスにいるポケモンの数に応じて表示する
     /// </summary>
-    public void SetPartyData(List<Pokemon> pokemons)
+    public void SetPartyData()
     {
-        this.m_pokemons = pokemons;
+        m_pokemons = m_party.Pokemons;
 
         for (int i = 0; i < m_memberSlots.Length; i++)
         {
-            if (i < pokemons.Count)
+            if (i < m_pokemons.Count)
             {
-                m_memberSlots[i].SetData(pokemons[i]);
+                m_memberSlots[i].Init(m_pokemons[i]);
             }
             else
             {

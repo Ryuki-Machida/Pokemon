@@ -19,14 +19,23 @@ public class PartyMemberUI : MonoBehaviour
     /// <summary>Pokemon クラス</summary>
     Pokemon m_pokemon;
 
-    public void SetData(Pokemon pokemon)
+    public void Init(Pokemon pokemon)
     {
         m_pokemon = pokemon;
+        UpdateDate();
 
-        m_nameText.text = pokemon.Base.Name;
-        m_levelText.text = "Lv " + pokemon.Level;
-        m_hpBar.SetHP((float)pokemon.HP / pokemon.MaxHp);
-        m_hpText.text = pokemon.HP + "/" + pokemon.MaxHp.ToString();
+        m_pokemon.OnHPChanged += UpdateDate;
+    }
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    void UpdateDate()
+    {
+        m_nameText.text = m_pokemon.Base.Name;
+        m_levelText.text = "Lv " + m_pokemon.Level;
+        m_hpBar.SetHP((float)m_pokemon.HP / m_pokemon.MaxHp);
+        m_hpText.text = m_pokemon.HP + "/" + m_pokemon.MaxHp.ToString();
     }
 
     /// <summary>
