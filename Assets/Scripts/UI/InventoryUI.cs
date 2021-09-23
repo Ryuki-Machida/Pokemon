@@ -19,6 +19,7 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] Text m_itemDescription;
 
     [SerializeField] PartyScreen m_partyScreen;
+    [SerializeField] SoundManager m_soundManager;
 
     int m_selectedItem = 0;
     InventoryUIState state;
@@ -127,6 +128,7 @@ public class InventoryUI : MonoBehaviour
         var usedItem = m_inventory.UseItem(m_selectedItem, m_partyScreen.SelectedMember);
         if (usedItem != null)
         {
+            m_soundManager.ItemUse();
             yield return DialogManager.Instance.ShowDialogText($"{usedItem.Name}を使った");
             onItemUsed?.Invoke();
         }

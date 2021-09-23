@@ -6,6 +6,8 @@ public class BattleCamera : MonoBehaviour
 {
     [SerializeField] Camera m_camera;
     [SerializeField] Camera m_camera1;
+    [SerializeField] Camera m_camera2;
+    [SerializeField] Camera m_camera3;
 
 
     /// <summary>
@@ -13,10 +15,10 @@ public class BattleCamera : MonoBehaviour
     /// </summary>
     public void EnemyCamera()
     {
-        m_camera.gameObject.SetActive(true);
+        m_camera.gameObject.SetActive(false);
         m_camera1.gameObject.SetActive(false);
-        m_camera.transform.position = new Vector3(-5, 3, 29);
-        m_camera.transform.Rotate(new Vector3(0, 50, 0));
+        m_camera2.gameObject.SetActive(true);
+        m_camera3.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -24,10 +26,10 @@ public class BattleCamera : MonoBehaviour
     /// </summary>
     public void PlayerCamera()
     {
-        m_camera.gameObject.SetActive(true);
+        m_camera.gameObject.SetActive(false);
         m_camera1.gameObject.SetActive(false);
-        m_camera.transform.position = new Vector3(5, 3, 29);
-        m_camera.transform.Rotate(new Vector3(0, 260, 0));
+        m_camera2.gameObject.SetActive(false);
+        m_camera3.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -37,6 +39,8 @@ public class BattleCamera : MonoBehaviour
     {
         m_camera.gameObject.SetActive(false);
         m_camera1.gameObject.SetActive(true);
+        m_camera2.gameObject.SetActive(false);
+        m_camera3.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -46,7 +50,7 @@ public class BattleCamera : MonoBehaviour
     {
         m_camera.gameObject.SetActive(true);
         m_camera1.gameObject.SetActive(false);
-        m_camera.transform.position = new Vector3(0, 3, 20);
-        m_camera.transform.Rotate(new Vector3(0, 50, 0));
+        m_camera2.gameObject.SetActive(false);
+        m_camera3.gameObject.SetActive(false);
     }
 }

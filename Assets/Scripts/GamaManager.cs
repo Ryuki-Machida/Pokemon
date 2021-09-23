@@ -17,6 +17,7 @@ public class GamaManager : MonoBehaviour
     [SerializeField] FadeManager m_fade;
     [SerializeField] InventoryUI m_inventoryUI;
     [SerializeField] PartyScreen m_partyScreen;
+    [SerializeField] SoundManager m_soundManager;
 
     GameState state;
     TrainerController m_trainerController;
@@ -86,6 +87,7 @@ public class GamaManager : MonoBehaviour
     void StartBattle()
     {
         state = GameState.Battle;
+        m_soundManager.Battle();
         m_battleManager.gameObject.SetActive(true);
         m_worldCamera.gameObject.SetActive(false);
 
@@ -101,6 +103,7 @@ public class GamaManager : MonoBehaviour
     public void StartTrainerBattle(TrainerController  trainer)
     {
         state = GameState.Battle;
+        m_soundManager.TrainerBattle();
         m_battleManager.gameObject.SetActive(true);
         m_worldCamera.gameObject.SetActive(false);
 
@@ -123,6 +126,7 @@ public class GamaManager : MonoBehaviour
         }
 
         state = GameState.FreeRoam;
+        m_soundManager.Map();
         m_battleManager.gameObject.SetActive(false);
         m_worldCamera.gameObject.SetActive(true);
     }
@@ -168,6 +172,7 @@ public class GamaManager : MonoBehaviour
         }
         else if (state == GameState.Bag)
         {
+
             Action onBack = () =>
             {
                 m_inventoryUI.gameObject.SetActive(false);

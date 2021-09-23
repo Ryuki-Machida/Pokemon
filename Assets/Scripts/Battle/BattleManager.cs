@@ -17,6 +17,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] MoveSelectionUI moveSelectionUI;
     [SerializeField] InventoryUI inventoryUI;
     [SerializeField] BattleCamera battleCamera;
+    [SerializeField] SoundManager soundManager;
 
     [SerializeField] GameObject m_PlayerHud;
     [SerializeField] GameObject m_EnemyHud;
@@ -156,6 +157,9 @@ public class BattleManager : MonoBehaviour
         dialogBox.EnableActionSelector(false);
     }
 
+    /// <summary>
+    /// バック選択してるとき
+    /// </summary>
     private void OpenBag()
     {
         state = BattleState.Bag;
@@ -308,9 +312,11 @@ public class BattleManager : MonoBehaviour
         if (CheckIfMoveHits(move, sourceUnit.Pokemon, targetUnit.Pokemon)) //攻撃が当たったら
         {
             //攻撃アニメーション
+            soundManager.Attack();
             sourceUnit.PokemonAttack();
             yield return new WaitForSeconds(0.8f);
             //受けるアニメーション
+            soundManager.Hit();
             targetUnit.PokemonHit();
             yield return new WaitForSeconds(0.5f);
 
@@ -485,6 +491,7 @@ public class BattleManager : MonoBehaviour
             //レベルアップ
             while (playerUnit.Pokemon.CheckForLevelUp())
             {
+                soundManager.LevelUp();
                 playerUnit.Hud.SetLevel();
                 yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}のレベルが　{playerUnit.Pokemon.Level}になった！");
 
