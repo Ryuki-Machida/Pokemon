@@ -45,7 +45,7 @@ public class ConditionDB : MonoBehaviour
                 OnAfterTurn = (Pokemon pokemon) =>
                 {
                     pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　やけどのダメージをうけている");
-                    pokemon.UpdateHP(pokemon.MaxHp / 16);
+                    pokemon.UpdateHP(pokemon.MaxHp / 8);
                 }
             }
         },

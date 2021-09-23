@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState { FreeRoam, Battle, Dialog, Menu, Bag, Cutscene }
+public enum GameState { FreeRoam, Battle, Dialog, Menu, PartyScreen, Bag, Cutscene }
 
 public class GamaManager : MonoBehaviour
 {
@@ -16,6 +16,7 @@ public class GamaManager : MonoBehaviour
     /// <summary>Script</summary>
     [SerializeField] FadeManager m_fade;
     [SerializeField] InventoryUI m_inventoryUI;
+    [SerializeField] PartyScreen m_partyScreen;
 
     GameState state;
     TrainerController m_trainerController;
@@ -35,6 +36,8 @@ public class GamaManager : MonoBehaviour
     {
         m_player.OnEncountered += Fade;
         m_battleManager.OnBattleOver += EndBattle;
+
+        m_partyScreen.Init();
 
         m_player.OnTrainersView += (Collider2D trainerCollider) =>
         {
@@ -148,6 +151,21 @@ public class GamaManager : MonoBehaviour
         {
             m_menuController.HandleUpdate();
         }
+        else if (state == GameState.PartyScreen)
+        {
+            Action onSelected = () =>
+            {
+
+            };
+
+            Action onBack = () =>
+            {
+                m_partyScreen.gameObject.SetActive(false);
+                state = GameState.FreeRoam;
+            };
+
+            m_partyScreen.HandleUpdate(onSelected, onBack);
+        }
         else if (state == GameState.Bag)
         {
             Action onBack = () =>
@@ -166,6 +184,13 @@ public class GamaManager : MonoBehaviour
     void OnMenuSelected(int selectedItem)
     {
         if (selectedItem == 0)
+        {
+            //モンスター
+            m_partyScreen.gameObject.SetActive(true);
+            m_partyScreen.SetPartyData(m_player.GetComponent<PokemonParty>().Pokemons);
+            state = GameState.PartyScreen;
+        }
+        else if (selectedItem == 1)
         {
             //バック
             m_inventoryUI.gameObject.SetActive(true);

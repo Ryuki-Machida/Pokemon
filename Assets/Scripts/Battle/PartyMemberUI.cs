@@ -16,9 +16,7 @@ public class PartyMemberUI : MonoBehaviour
     /// <summary>HPのtext</summary>
     [SerializeField] Text m_hpText;
 
-    /// <summary>選択された時の色の設定</summary>
-    [SerializeField] Color m_color;
-    /// <summary>Pokemon class</summary>
+    /// <summary>Pokemon クラス</summary>
     Pokemon m_pokemon;
 
     public void SetData(Pokemon pokemon)
@@ -38,7 +36,7 @@ public class PartyMemberUI : MonoBehaviour
     {
         if (selected)
         {
-            m_image.color = m_color;
+            m_image.color = GlobalSettings.i.HighlightedColor;
         }
         else
         {

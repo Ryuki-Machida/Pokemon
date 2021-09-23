@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,18 @@ public class PartyScreen : MonoBehaviour
     PartyMemberUI[] m_memberSlots;
     /// <summary>ボックス内のポケモン</summary>
     List<Pokemon> m_pokemons;
+
+    int m_selection = 0;
+
+    public Pokemon SelectedMember
+    {
+        get { return m_pokemons[m_selection]; }
+    }
+
+    /// <summary>
+    /// パーティ画面は、ActionSelection、Running、AboutToUseなどのさまざまな状態から呼び出す
+    /// </summary>
+    public BattleState? CalledFrom { get; set; }
 
     public void Init()
     {
@@ -35,7 +48,51 @@ public class PartyScreen : MonoBehaviour
                 m_memberSlots[i].gameObject.SetActive(false);
             }
         }
+
+        UpdateMemberSelected(m_selection);
+
         m_messageText.text = "入れ替えるポケモン";
+    }
+
+    /// <summary>
+    /// パーティー画面の操作方法
+    /// </summary>
+    public void HandleUpdate(Action onSelected, Action onBack)
+    {
+        var prevSelection = m_selection;
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            ++m_selection;
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            --m_selection;
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            m_selection += 2;
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            m_selection -= 2;
+        }
+
+        m_selection = Mathf.Clamp(m_selection, 0, m_pokemons.Count - 1);
+
+        if (m_selection != prevSelection)
+        {
+            UpdateMemberSelected(m_selection);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            onSelected?.Invoke();
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            onBack?.Invoke();
+        }
     }
 
     /// <summary>
