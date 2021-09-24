@@ -86,6 +86,7 @@
     <Compile Include="Assets\Scripts\Data\ConditionDB.cs" />
     <Compile Include="Assets\Scripts\FadeManager.cs" />
     <Compile Include="Assets\Scripts\GamaManager.cs" />
+    <Compile Include="Assets\Scripts\GameStart.cs" />
     <Compile Include="Assets\Scripts\Gameplay\Dialog.cs" />
     <Compile Include="Assets\Scripts\Gameplay\DialogManager.cs" />
     <Compile Include="Assets\Scripts\Gameplay\GameLayers.cs" />

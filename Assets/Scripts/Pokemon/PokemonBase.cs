@@ -179,15 +179,15 @@ public enum GrowthRate
 /// </summary>
 public enum Stat
 {
-    Attack,
-    Defense,
-    SpAttack,
-    SpDefense,
-    Speed,
+    攻撃,
+    防御,
+    特攻,
+    特防,
+    素早さ,
 
     //2つはmoveAccuracyをブーストするために使用する
-    Accuracy,
-    Evasion
+    命中率,
+    回避率
 }
 
 

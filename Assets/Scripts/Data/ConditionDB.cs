@@ -28,10 +28,10 @@ public class ConditionDB : MonoBehaviour
             new Condition()
             {
                 Name = "どく",
-                StartMessge = "は　どくをうけた",
+                StartMessge = "は どくをうけた",
                 OnAfterTurn = (Pokemon pokemon) =>
                 {
-                    pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　どくのダメージをうけている");
+                    pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は どくのダメージをうけている");
                     pokemon.DecreaseHP(pokemon.MaxHp / 8);
                 }
             }
@@ -41,10 +41,10 @@ public class ConditionDB : MonoBehaviour
             new Condition()
             {
                 Name = "やけど",
-                StartMessge = "は　やけどをおった",
+                StartMessge = "は やけどをおった",
                 OnAfterTurn = (Pokemon pokemon) =>
                 {
-                    pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　やけどのダメージをうけている");
+                    pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は やけどのダメージをうけている");
                     pokemon.DecreaseHP(pokemon.MaxHp / 8);
                 }
             }
@@ -54,13 +54,13 @@ public class ConditionDB : MonoBehaviour
             new Condition()
             {
                 Name = "まひ",
-                StartMessge = "は　まひをうけた",
+                StartMessge = "は まひをうけた",
                 OnBeforeMove = (Pokemon pokemon) =>
                 {
                     //20％の確率で動かない
                     if (Random.Range(1, 5) == 1)
                     {
-                        pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　しびれてうごけない");
+                        pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は しびれてうごけない");
                         return false;
                     }
                     return true;
@@ -72,17 +72,17 @@ public class ConditionDB : MonoBehaviour
             new Condition()
             {
                 Name = "こおり",
-                StartMessge = "は　こおってしまった",
+                StartMessge = "は こおってしまった",
                 OnBeforeMove = (Pokemon pokemon) =>
                 {
                     //20％の確率で動けるようになる
                     if (Random.Range(1, 5) == 1)
                     {
                         pokemon.CureStatus();
-                        pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　こおりがとけた");
+                        pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は こおりがとけた");
                         return true;
                     }
-                    pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　こおってうごけない");
+                    pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は こおってうごけない");
                     return false;
                 }
             }
@@ -92,7 +92,7 @@ public class ConditionDB : MonoBehaviour
             new Condition()
             {
                 Name = "ねむり",
-                StartMessge = "は　ねむってしまった",
+                StartMessge = "は ねむってしまった",
                 OnStart = (Pokemon pokemon) =>
                 {
                     //1〜3ターン寝る
@@ -104,12 +104,12 @@ public class ConditionDB : MonoBehaviour
                     if (pokemon.StatusTime <= 0)
                     {
                         pokemon.CureStatus();
-                        pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　めがさめた！");
+                        pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は めがさめた！");
                         return true;
                     }
 
                     pokemon.StatusTime--;
-                    pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　ねむっている");
+                    pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は ねむっている");
                     return false;
                 }
             }
@@ -121,7 +121,7 @@ public class ConditionDB : MonoBehaviour
             new Condition()
             {
                 Name = "こんらん",
-                StartMessge = "は　こんらんしてしまった",
+                StartMessge = "は こんらんしてしまった",
                 OnStart = (Pokemon pokemon) =>
                 {
                     //1〜4ターンこんらんする
@@ -133,7 +133,7 @@ public class ConditionDB : MonoBehaviour
                     if (pokemon.VolatileStatusTime <= 0)
                     {
                         pokemon.CureVolayileStatus();
-                        pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　こんらんがなおった！");
+                        pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は こんらんがなおった！");
                         return true;
                     }
 
@@ -146,9 +146,9 @@ public class ConditionDB : MonoBehaviour
                     }
 
                     //こんらんによってダメージを受ける
-                    pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　こんらんしている");
+                    pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は こんらんしている");
                     pokemon.DecreaseHP(pokemon.MaxHp / 8);
-                    pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は　自分を攻撃した");
+                    pokemon.StatusChanges.Enqueue($"{pokemon.Base.Name}は 自分を攻撃した");
                     return false;
                 }
             }

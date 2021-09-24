@@ -74,11 +74,11 @@ public class Pokemon
     void CalculateStats()
     {
         Stats = new Dictionary<Stat, int>();
-        Stats.Add(Stat.Attack, Mathf.FloorToInt((Base.Attack * Level) / 100f) + 5);
-        Stats.Add(Stat.Defense, Mathf.FloorToInt((Base.Defense * Level) / 100f) + 5);
-        Stats.Add(Stat.SpAttack, Mathf.FloorToInt((Base.SpAttack * Level) / 100f) + 5);
-        Stats.Add(Stat.SpDefense, Mathf.FloorToInt((Base.SpDefense * Level) / 100f) + 5);
-        Stats.Add(Stat.Speed, Mathf.FloorToInt((Base.Speed * Level) / 100f) + 5);
+        Stats.Add(Stat.攻撃, Mathf.FloorToInt((Base.Attack * Level) / 100f) + 5);
+        Stats.Add(Stat.防御, Mathf.FloorToInt((Base.Defense * Level) / 100f) + 5);
+        Stats.Add(Stat.特攻, Mathf.FloorToInt((Base.SpAttack * Level) / 100f) + 5);
+        Stats.Add(Stat.特防, Mathf.FloorToInt((Base.SpDefense * Level) / 100f) + 5);
+        Stats.Add(Stat.素早さ, Mathf.FloorToInt((Base.Speed * Level) / 100f) + 5);
 
         MaxHp = Mathf.FloorToInt((Base.MaxHp * Level) / 100f) + 10 + Level;
     }
@@ -90,13 +90,13 @@ public class Pokemon
     {
         StatBoosts = new Dictionary<Stat, int>()
         {
-            {Stat.Attack, 0},
-            {Stat.Defense, 0},
-            {Stat.SpAttack, 0},
-            {Stat.SpDefense, 0},
-            {Stat.Speed, 0},
-            {Stat.Accuracy, 0},
-            {Stat.Evasion, 0},
+            {Stat.攻撃, 0},
+            {Stat.防御, 0},
+            {Stat.特攻, 0},
+            {Stat.特防, 0},
+            {Stat.素早さ, 0},
+            {Stat.命中率, 0},
+            {Stat.回避率, 0},
         };
     }
 
@@ -139,11 +139,11 @@ public class Pokemon
 
             if (boost > 0)
             {
-                StatusChanges.Enqueue($"{Base.Name}の　{stat}があがった!");
+                StatusChanges.Enqueue($"{Base.Name}の {stat}があがった!");
             }
             else
             {
-                StatusChanges.Enqueue($"{Base.Name}の　{stat}がさがった");
+                StatusChanges.Enqueue($"{Base.Name}の {stat}がさがった");
             }
 
             Debug.Log($"{stat}が{StatBoosts[stat]}された");
@@ -184,27 +184,27 @@ public class Pokemon
 
     public int Attack
     {
-        get { return GetStat(Stat.Attack); }
+        get { return GetStat(Stat.攻撃); }
     }
 
     public int Defense
     {
-        get { return GetStat(Stat.Defense); }
+        get { return GetStat(Stat.防御); }
     }
 
     public int SpAttack
     {
-        get { return GetStat(Stat.SpAttack); }
+        get { return GetStat(Stat.特攻); }
     }
 
     public int SpDefense
     {
-        get { return GetStat(Stat.SpDefense); }
+        get { return GetStat(Stat.特防); }
     }
 
     public int Speed
     {
-        get { return GetStat(Stat.Speed); }
+        get { return GetStat(Stat.素早さ); }
     }
 
     public int MaxHp { get; private set; }

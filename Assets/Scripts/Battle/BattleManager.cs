@@ -90,10 +90,10 @@ public class BattleManager : MonoBehaviour
             dialogBox.SetMoveNames(playerUnit.Pokemon.Moves);
 
             battleCamera.EnemyCamera();
-            yield return dialogBox.TypeDialog($"あっ！　野生の{enemyUnit.Pokemon.Base.Name}　が飛び出して来た！");
+            yield return dialogBox.TypeDialog($"あっ!\n 野生の{enemyUnit.Pokemon.Base.Name}が飛び出して来た！");
             yield return new WaitForSeconds(0.2f);
             battleCamera.PlayerCamera();
-            yield return dialogBox.TypeDialog($"ゆけっ！　{playerUnit.Pokemon.Base.Name}！");
+            yield return dialogBox.TypeDialog($"ゆけっ!\n{playerUnit.Pokemon.Base.Name}！");
             yield return new WaitForSeconds(1f);
         }
         else  //トレーナーバトル
@@ -105,20 +105,20 @@ public class BattleManager : MonoBehaviour
             m_trainer.gameObject.SetActive(true);
 
             battleCamera.EnemyCamera();
-            yield return dialogBox.TypeDialog($"{trainer.Name}が 勝負を仕掛けてきた！");
+            yield return dialogBox.TypeDialog($"{trainer.Name}が\n 勝負を仕掛けてきた！");
 
             //トレーナーの最初のポケモン
             enemyUnit.gameObject.SetActive(true);
             var enemyPokemon = m_trainerParty.GetHealthyPokemon();
             enemyUnit.Setup(enemyPokemon);
-            yield return dialogBox.TypeDialog($"{trainer.Name}が {enemyPokemon.Base.Name}を繰り出してきた！");
+            yield return dialogBox.TypeDialog($"{trainer.Name}は\n {enemyPokemon.Base.Name}をくりだした！");
 
             //プレイヤーの最初のポケモン
             battleCamera.PlayerCamera();
             playerUnit.gameObject.SetActive(true);
             var playerPokemon = m_playerParty.GetHealthyPokemon();
             playerUnit.Setup(playerPokemon);
-            yield return dialogBox.TypeDialog($"行け！ {playerPokemon.Base.Name}！");
+            yield return dialogBox.TypeDialog($"行け！\n{playerPokemon.Base.Name}！");
             dialogBox.SetMoveNames(playerUnit.Pokemon.Moves);
             yield return new WaitForSeconds(1f);
         }
@@ -182,7 +182,7 @@ public class BattleManager : MonoBehaviour
     private IEnumerator AboutToUse(Pokemon newPokemon)
     {
         state = BattleState.Busy;
-        yield return dialogBox.TypeDialog($"{trainer.Name}は　{newPokemon.Base.Name}を出そうとしている。　交換しますか？");
+        yield return dialogBox.TypeDialog($"{trainer.Name}は {newPokemon.Base.Name}を出そうとしている\n 交換しますか？");
 
         state = BattleState.AboutToUse;
         dialogBox.EndbleChoiceBox(true);
@@ -304,7 +304,7 @@ public class BattleManager : MonoBehaviour
         yield return ShowStatusChanges(sourceUnit.Pokemon);
 
         move.PP--;
-        yield return dialogBox.TypeDialog($"{sourceUnit.Pokemon.Base.Name}の　{move.Base.Name}!");
+        yield return dialogBox.TypeDialog($"{sourceUnit.Pokemon.Base.Name}の\n {move.Base.Name}!");
 
         dialogBox.EnableDialogText(false);
         m_EnemyHud.SetActive(true);
@@ -358,7 +358,7 @@ public class BattleManager : MonoBehaviour
         else
         {
             dialogBox.EnableDialogText(true);
-            yield return dialogBox.TypeDialog($"{targetUnit.Pokemon.Base.Name}には 攻撃が当たらなかった");
+            yield return dialogBox.TypeDialog($"{targetUnit.Pokemon.Base.Name}には\n 攻撃が当たらなかった");
         }
     }
 
@@ -425,8 +425,8 @@ public class BattleManager : MonoBehaviour
 
         float moveAccuracy = move.Base.Accuracy;
 
-        int accuracy = source.StatBoosts[Stat.Accuracy];
-        int evasion = target.StatBoosts[Stat.Evasion];
+        int accuracy = source.StatBoosts[Stat.命中率];
+        int evasion = target.StatBoosts[Stat.回避率];
 
         var boostValues = new float[] { 1f, 4f / 3f, 5f / 3f, 2f, 7f / 3f, 8f / 3f, 3f };
 
@@ -468,7 +468,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private IEnumerator HandlePokemonFainted(BattleUnit faintedUnit, BattleUnit sourceUnit)
     {
-        yield return dialogBox.TypeDialog($"{faintedUnit.Pokemon.Base.Name}は たおれた！");
+        yield return dialogBox.TypeDialog($"{faintedUnit.Pokemon.Base.Name}は\n たおれた！");
         faintedUnit.PokemonDie();
         yield return new WaitForSeconds(1f);
 
@@ -485,7 +485,7 @@ public class BattleManager : MonoBehaviour
 
             int expGain = Mathf.FloorToInt((expYield * enemyLevel * trainerBonus) / 7);
             playerUnit.Pokemon.Exp += expGain;
-            yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}は　経験値{expGain}貰った");
+            yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}は\n 経験値{expGain}貰った");
             yield return playerUnit.Hud.SetExpSmooth();
 
             //レベルアップ
@@ -493,7 +493,7 @@ public class BattleManager : MonoBehaviour
             {
                 soundManager.LevelUp();
                 playerUnit.Hud.SetLevel();
-                yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}のレベルが　{playerUnit.Pokemon.Level}になった！");
+                yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}のレベルが\n {playerUnit.Pokemon.Level}になった！");
 
                 //新しいワザを覚える
                 var newMove = playerUnit.Pokemon.GetLearnableMoveAtCurrLevel();
@@ -502,13 +502,13 @@ public class BattleManager : MonoBehaviour
                     if (playerUnit.Pokemon.Moves.Count < PokemonBase.MaxNumOfMoves)
                     {
                         playerUnit.Pokemon.LearnMove(newMove);
-                        yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}は　{newMove.Base.Name}を覚えた！");
+                        yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}は\n {newMove.Base.Name}を覚えた！");
                         dialogBox.SetMoveNames(playerUnit.Pokemon.Moves);
                     }
                     else
                     {
-                        yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}は　{newMove.Base.Name}を覚えようとしている");
-                        yield return dialogBox.TypeDialog($"しかし{playerUnit.Pokemon.Base.Name}は　わざを{PokemonBase.MaxNumOfMoves}つ覚えている");
+                        yield return dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}は\n {newMove.Base.Name}を覚えようとしている");
+                        yield return dialogBox.TypeDialog($"しかし{playerUnit.Pokemon.Base.Name}は\n わざを{PokemonBase.MaxNumOfMoves}つ覚えている");
                         yield return ChooseMoveToForget(playerUnit.Pokemon, newMove.Base);
                         yield return new WaitUntil(() => state != BattleState.MoveToForget);
                         yield return new WaitForSeconds(2f);
@@ -629,13 +629,13 @@ public class BattleManager : MonoBehaviour
                 if (moveIndex == PokemonBase.MaxNumOfMoves)
                 {
                     //わざを覚えない
-                    StartCoroutine(dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}は　{m_moveToLearn.Name}を覚えなかった"));
+                    StartCoroutine(dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}は\n {m_moveToLearn.Name}を覚えなかった"));
                 }
                 else
                 {
                     //選択したわざを忘れ、新しいわざを覚える
                     var selectedMove = playerUnit.Pokemon.Moves[moveIndex].Base;
-                    StartCoroutine(dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}は　{selectedMove.Name}を忘れ　{m_moveToLearn.Name}を覚えた！"));
+                    StartCoroutine(dialogBox.TypeDialog($"{playerUnit.Pokemon.Base.Name}は {selectedMove.Name}を忘れ\n {m_moveToLearn.Name}を覚えた！"));
 
                     playerUnit.Pokemon.Moves[moveIndex] = new Move(m_moveToLearn);
                 }
@@ -840,14 +840,14 @@ public class BattleManager : MonoBehaviour
         if (playerUnit.Pokemon.HP > 0)
         {
             dialogBox.EnableDialogText(true);
-            yield return dialogBox.TypeDialog($"戻れ！　{playerUnit.Pokemon.Base.Name}！");
+            yield return dialogBox.TypeDialog($"戻れ!\n{playerUnit.Pokemon.Base.Name}！");
             playerUnit.GameObjectDestroy();
             yield return new WaitForSeconds(2f);
         }
 
         playerUnit.Setup(newPokemon);
         dialogBox.SetMoveNames(newPokemon.Moves);
-        yield return dialogBox.TypeDialog($"ゆけっ！　{playerUnit.Pokemon.Base.Name}！");
+        yield return dialogBox.TypeDialog($"ゆけっ!\n {playerUnit.Pokemon.Base.Name}！");
 
         if (isTrainerAboutToUse)
         {
@@ -868,7 +868,7 @@ public class BattleManager : MonoBehaviour
 
         var nextPokemon = m_trainerParty.GetHealthyPokemon();
         enemyUnit.Setup(nextPokemon);
-        yield return dialogBox.TypeDialog($"{trainer.Name}が {nextPokemon.Base.Name}を繰り出してきた！");
+        yield return dialogBox.TypeDialog($"{trainer.Name}は\n {nextPokemon.Base.Name}をくりだした！");
 
         state = BattleState.RunningTurn;
     }

@@ -57,7 +57,7 @@ public class PartyScreen : MonoBehaviour
 
         UpdateMemberSelected(m_selection);
 
-        m_messageText.text = "入れ替えるポケモン";
+        m_messageText.text = "入れ替えるモンスター";
     }
 
     /// <summary>
