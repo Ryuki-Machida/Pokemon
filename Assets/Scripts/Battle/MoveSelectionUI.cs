@@ -11,6 +11,9 @@ public class MoveSelectionUI : MonoBehaviour
 
     int m_currentSelection = 0;
 
+    /// <summary>
+    /// わざのデータセットする
+    /// </summary>
     public void SetMoveData(List<MoveBase> currentMoves, MoveBase newMove)
     {
         for (int i = 0; i < currentMoves.Count; i++)

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState { FreeRoam, Battle, Dialog, Menu, PartyScreen, Bag, Cutscene }
 
@@ -19,6 +20,8 @@ public class GamaManager : MonoBehaviour
     [SerializeField] PartyScreen m_partyScreen;
     [SerializeField] SoundManager m_soundManager;
 
+    [SerializeField] string m_sceneName;
+
     GameState state;
     TrainerController m_trainerController;
     MenuController m_menuController;
@@ -35,12 +38,12 @@ public class GamaManager : MonoBehaviour
 
     private void Start()
     {
-        m_player.OnEncountered += Fade;
-        m_battleManager.OnBattleOver += EndBattle;
+        m_player.m_OnEncountered += Fade;
+        m_battleManager.m_OnBattleOver += EndBattle;
 
         m_partyScreen.Init();
 
-        m_player.OnTrainersView += (Collider2D trainerCollider) =>
+        m_player.m_OnTrainersView += (Collider2D trainerCollider) =>
         {
             var trainer = trainerCollider.GetComponentInParent<TrainerController>();
             if (trainer != null)
@@ -50,12 +53,12 @@ public class GamaManager : MonoBehaviour
             }
         };
 
-        DialogManager.Instance.OnShowDialog += () =>
+        DialogManager.Instance.m_OnShowDialog += () =>
         {
             state = GameState.Dialog;
         };
 
-        DialogManager.Instance.OnCloseDialog += () =>
+        DialogManager.Instance.m_OnCloseDialog += () =>
         {
             if (state == GameState.Dialog)
             {
@@ -199,6 +202,11 @@ public class GamaManager : MonoBehaviour
             //バック
             m_inventoryUI.gameObject.SetActive(true);
             state = GameState.Bag;
+        }
+        else if (selectedItem == 2)
+        {
+            //タイトル
+            SceneManager.LoadScene(m_sceneName);
         }
     }
 }

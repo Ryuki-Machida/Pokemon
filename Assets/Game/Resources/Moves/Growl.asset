@@ -15,7 +15,7 @@ MonoBehaviour:
   m_name: "\u306A\u304D\u3054\u3048"
   m_description: 
   m_type: 1
-  m_TypeColor: {r: 0.4339623, g: 0.4339623, b: 0.4339623, a: 1}
+  m_TypeSprite: {fileID: 21300000, guid: b736b292d437a99499a260f38edfd67d, type: 3}
   m_power: 0
   m_accuracy: 100
   m_alwaysHits: 0

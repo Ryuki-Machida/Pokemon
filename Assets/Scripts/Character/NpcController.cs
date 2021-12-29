@@ -11,7 +11,7 @@ public class NpcController : MonoBehaviour, Interactable
     /// <summary>止まる時間<summary>
     [SerializeField] float m_timePattern;
 
-    NpcState state;
+    NpcState m_state;
     float m_idleTimer = 0f;
     int m_currentPattern = 0;
 
@@ -24,22 +24,22 @@ public class NpcController : MonoBehaviour, Interactable
 
     public void Interact(Transform initiator)
     {
-        if (state == NpcState.Idle)
+        if (m_state == NpcState.Idle)
         {
-            state = NpcState.Dialog;
+            m_state = NpcState.Dialog;
             m_character.LookTowards(initiator.position); //対象のオブジェクトの方を向く
 
             StartCoroutine(DialogManager.Instance.ShowDialog(m_dialog, () =>
             {
                 m_idleTimer = 0;
-                state = NpcState.Idle;
+                m_state = NpcState.Idle;
             }));
         }
     }
 
     private void Update()
     {
-        if (state == NpcState.Idle)
+        if (m_state == NpcState.Idle)
         {
             m_idleTimer += Time.deltaTime;
             if (m_idleTimer > m_timePattern)
@@ -59,7 +59,7 @@ public class NpcController : MonoBehaviour, Interactable
     /// </summary>
     IEnumerator Walk()
     {
-        state = NpcState.Walking;
+        m_state = NpcState.Walking;
 
         var oldPos = transform.position;
 
@@ -70,7 +70,7 @@ public class NpcController : MonoBehaviour, Interactable
             m_currentPattern = (m_currentPattern + 1) % m_movePattern.Count;
         }
 
-        state = NpcState.Idle;
+        m_state = NpcState.Idle;
     }
 }
 

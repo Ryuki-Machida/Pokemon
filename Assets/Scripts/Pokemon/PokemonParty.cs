@@ -9,7 +9,7 @@ public class PokemonParty : MonoBehaviour
     /// <summary>パーティー内の数</summary>
     [SerializeField] List<Pokemon> m_pokemons;
 
-    public event Action OnUpdated;
+    public event Action m_OnUpdated;
 
     public List<Pokemon> Pokemons
     {
@@ -20,7 +20,7 @@ public class PokemonParty : MonoBehaviour
         set
         {
             m_pokemons = value;
-            OnUpdated?.Invoke();
+            m_OnUpdated?.Invoke();
         }
     }
 

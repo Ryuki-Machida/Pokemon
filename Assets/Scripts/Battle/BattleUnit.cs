@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class BattleUnit : MonoBehaviour
 {
-    [SerializeField] bool isPlayerUnit;
-    [SerializeField] BattleHud hud;
+    [SerializeField] bool m_isPlayerUnit;
+    [SerializeField] BattleHud m_hud;
 
     public bool IsPlayerUnit
     {
-        get { return isPlayerUnit; }
+        get { return m_isPlayerUnit; }
     }
 
     public BattleHud Hud
     {
-        get { return hud; }
+        get { return m_hud; }
     }
 
     public Pokemon Pokemon { get; set; }
@@ -31,7 +31,7 @@ public class BattleUnit : MonoBehaviour
     public void Setup(Pokemon pokemon)
     {
         Pokemon = pokemon;
-        if (isPlayerUnit)
+        if (m_isPlayerUnit)
         {
             //選んでる自分のゲームオブジェクトを子オブジェクトとして表示する
             poke = GameObject.Instantiate(Pokemon.Base.PokemonObject, transform);
@@ -41,13 +41,13 @@ public class BattleUnit : MonoBehaviour
             //選ばれた敵のゲームオブジェクトを子オブジェクトとして表示する
             poke = GameObject.Instantiate(Pokemon.Base.PokemonObject, transform);
         }
-        hud.gameObject.SetActive(true);
-        hud.SetData(pokemon);
+        m_hud.gameObject.SetActive(true);
+        m_hud.SetData(pokemon);
     }
 
     public void Clear()
     {
-        hud.gameObject.SetActive(false);
+        m_hud.gameObject.SetActive(false);
     }
 
     /// <summary>

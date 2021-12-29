@@ -10,17 +10,25 @@ public class SoundManager : MonoBehaviour
     [SerializeField] AudioClip m_bgm1;
     [SerializeField] AudioClip m_bgm2;
     [SerializeField] AudioClip m_bgm3;
+    [SerializeField] AudioClip m_bgm4;
 
 
     [SerializeField] AudioClip m_clip1;
     [SerializeField] AudioClip m_clip2;
     [SerializeField] AudioClip m_clip3;
     [SerializeField] AudioClip m_clip4;
+    [SerializeField] AudioClip m_clip5;
 
     public void Map()
     {
         m_bgm.clip = m_bgm1;
         m_bgm.Play();
+    }
+
+    public void StopMap()
+    {
+        m_bgm.clip = m_bgm1;
+        m_bgm.Stop();
     }
 
     public void Battle()
@@ -32,6 +40,12 @@ public class SoundManager : MonoBehaviour
     public void TrainerBattle()
     {
         m_bgm.clip = m_bgm3;
+        m_bgm.Play();
+    }
+
+    public void TrainerExclamation()
+    {
+        m_bgm.clip = m_bgm4;
         m_bgm.Play();
     }
 
@@ -56,6 +70,12 @@ public class SoundManager : MonoBehaviour
     public void ItemUse()
     {
         m_source.clip = m_clip4;
+        m_source.Play();
+    }
+
+    public void Exclamation()
+    {
+        m_source.clip = m_clip5;
         m_source.Play();
     }
 }

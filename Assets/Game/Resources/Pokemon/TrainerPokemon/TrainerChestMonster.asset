@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55fecbe447b4ece428027d02d3bc7d48, type: 3}
+  m_Name: TrainerChestMonster
+  m_EditorClassIdentifier: 
+  m_name: "\u30C1\u30A7\u30B9\u30C8"
+  m_description: 
+  m_PokemonObject: {fileID: 8135644038188502577, guid: 81a06b3c6b0b7974c9fa1795e5687d07,
+    type: 3}
+  type1: 9
+  type2: 0
+  m_maxHp: 170
+  m_attack: 75
+  m_defense: 65
+  m_spAttack: 205
+  m_spDefense: 75
+  m_speed: 165
+  m_expYield: 90
+  m_growthRate: 0
+  m_learnableMoves:
+  - moveBase: {fileID: 11400000, guid: 66c07a106b456274f8279a5d5299f7e1, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: 622a39ff80475974a927f8031e4f74d2, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: 97440559cd0c5cc48bedb10d83da3c19, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: 66c07a106b456274f8279a5d5299f7e1, type: 2}
+    level: 1

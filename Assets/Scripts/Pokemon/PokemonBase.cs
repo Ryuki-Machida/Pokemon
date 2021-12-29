@@ -157,12 +157,12 @@ public enum PokemonType
     Ice,
     Fighting,
     Poison,
+    Ghost,
     Ground,
     Flying,
     Psychic,
     Bug,
     Rock,
-    Ghost,
     Doragon,
 }
 
@@ -198,15 +198,17 @@ public class TypeChart
 {
     static float[][] chart =
     {
-        //                           NOR  FIR   WAT   ELE   GRA   ICE   FIG  POI
-        /* Normal */   new float[] { 1f,  1f,   1f,   1f,   1f,   1f,   1f,  1f },
-        /* Fire */     new float[] { 1f,  0.5f, 0.5f, 1f,   2f,   2f,   1f,  1f },
-        /* Water */    new float[] { 1f,  2f,   0.5f, 2f,   0.5f, 1f,   1f,  1f },
-        /* Electric */ new float[] { 1f,  1f,   2f,   0.5f, 0.5f, 2f,   1f,  1f },
-        /* Grass */    new float[] { 1f,  0.5f, 2f,   2f,   0.5f, 1f,   1f,  0.5f },
-        /* Ice */      new float[] { 1f,  0.5f, 0.5f, 1f,   2f,   0.5f, 1f,  1f },
-        /* Fighting */ new float[] { 2f,  1f,   1f,   1f,   2f,   1f,   1f,  0.5f },
-        /* Poison */   new float[] { 1f,  1f,   1f,   1f,   2f,   1f,   1f,  1f },
+        //                           NOR  FIR   WAT   ELE   GRA   ICE   FIG  POI   GHO
+        /* Normal */   new float[] { 1f,  1f,   1f,   1f,   1f,   1f,   1f,  1f,   1f },
+        /* Fire */     new float[] { 1f,  0.5f, 0.5f, 1f,   2f,   2f,   1f,  1f,   1f },
+        /* Water */    new float[] { 1f,  2f,   0.5f, 2f,   0.5f, 1f,   1f,  1f,   1f },
+        /* Electric */ new float[] { 1f,  1f,   2f,   0.5f, 0.5f, 2f,   1f,  1f,   1f },
+        /* Grass */    new float[] { 1f,  0.5f, 2f,   2f,   0.5f, 1f,   1f,  0.5f, 1f },
+        /* Ice */      new float[] { 1f,  0.5f, 0.5f, 1f,   2f,   0.5f, 1f,  1f,   1f },
+        /* Fighting */ new float[] { 2f,  1f,   1f,   1f,   2f,   1f,   1f,  0.5f, 1f },
+        /* Poison */   new float[] { 1f,  1f,   1f,   1f,   2f,   1f,   1f,  1f,   1f },
+        /* Ghost */    new float[] { 1f,  1f,   1f,   1f,   1f,   1f,   1f,  1f,   1f },
+
     };
 
     public static float GetEffectiveness(PokemonType attackType, PokemonType defenseType)

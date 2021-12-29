@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 技の管理
@@ -14,7 +15,7 @@ public class MoveBase : ScriptableObject
     [SerializeField] string m_description;
 
     [SerializeField] PokemonType m_type;
-    [SerializeField] Color m_TypeColor;
+    [SerializeField] Sprite m_TypeSprite;
     [SerializeField] int m_power;
     [SerializeField] int m_accuracy;
     [SerializeField] bool m_alwaysHits;
@@ -40,9 +41,9 @@ public class MoveBase : ScriptableObject
         get { return m_type; }
     }
 
-    public Color TypeColor
+    public Sprite TypeSprite
     {
-        get { return m_TypeColor; }
+        get { return m_TypeSprite; }
     }
 
     public int Power

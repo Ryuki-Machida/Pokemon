@@ -9,7 +9,7 @@ public class Inventory : MonoBehaviour
     /// <summary>アイテムの種類</summary>
     [SerializeField] List<ItemSlot> m_slots;
 
-    public event Action OnUpdated;
+    public event Action m_OnUpdated;
 
     public List<ItemSlot> Slots
     {
@@ -44,7 +44,7 @@ public class Inventory : MonoBehaviour
             m_slots.Remove(itemSlot);
         }
 
-        OnUpdated?.Invoke();
+        m_OnUpdated?.Invoke();
     }
 
     public static Inventory GetInventory()

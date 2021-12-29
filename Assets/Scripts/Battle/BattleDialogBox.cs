@@ -17,7 +17,7 @@ public class BattleDialogBox : MonoBehaviour
 
     [SerializeField] List<Image> m_actionImage;
     [SerializeField] List<Text> m_actionText;
-    [SerializeField] List<Image> m_typeColor;
+    [SerializeField] List<Image> m_typeImage;
     [SerializeField] List<Text> m_moveText;
     [SerializeField] List<Image> m_moveImage;
 
@@ -177,11 +177,11 @@ public class BattleDialogBox : MonoBehaviour
         }
 
         //それぞれの技のタイプカラー
-        for (int i = 0; i < m_typeColor.Count; i++)
+        for (int i = 0; i < m_typeImage.Count; i++)
         {
             if (i < moves.Count)
             {
-                m_typeColor[i].color = moves[i].Base.TypeColor;
+                m_typeImage[i].sprite = moves[i].Base.TypeSprite;
             }
         }
     }

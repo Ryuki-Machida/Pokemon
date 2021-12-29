@@ -39,7 +39,7 @@ public class BattleHud : MonoBehaviour
         m_nameText.text = pokemon.Base.Name;
         SetLevel();
         m_hpBar.SetHP((float)pokemon.HP / pokemon.MaxHp);
-        m_hpText.text = pokemon.HP + "/" + pokemon.MaxHp.ToString();
+        //m_hpText.text = pokemon.HP + "/" + pokemon.MaxHp.ToString();
         SetExp();
 
         //状態異常のUIのカラーを設定
@@ -77,7 +77,7 @@ public class BattleHud : MonoBehaviour
     public void SetLevel()
     {
         m_levelText.text = "Lv " + m_pokemon.Level;
-        //m_hpText.text = m_pokemon.HP + "/" + m_pokemon.MaxHp.ToString();
+        m_hpText.text = m_pokemon.HP + "/" + m_pokemon.MaxHp.ToString();
     }
 
     public void SetExp()

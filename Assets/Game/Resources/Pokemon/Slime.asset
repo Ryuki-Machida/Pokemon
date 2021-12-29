@@ -18,20 +18,22 @@ MonoBehaviour:
     type: 3}
   type1: 2
   type2: 0
-  m_maxHp: 39
-  m_attack: 52
-  m_defense: 43
-  m_spAttack: 60
-  m_spDefense: 50
-  m_speed: 65
+  m_maxHp: 188
+  m_attack: 109
+  m_defense: 91
+  m_spAttack: 125
+  m_spDefense: 105
+  m_speed: 135
   m_expYield: 60
   m_growthRate: 0
   m_learnableMoves:
-  - moveBase: {fileID: 11400000, guid: 7bacd6a79596b9e429060e11ec9ad0ab, type: 2}
-    level: 1
-  - moveBase: {fileID: 11400000, guid: ccd752cdb62c30a4997cd5d8fff58a1e, type: 2}
-    level: 1
-  - moveBase: {fileID: 11400000, guid: 97440559cd0c5cc48bedb10d83da3c19, type: 2}
-    level: 1
   - moveBase: {fileID: 11400000, guid: 8d4c5613ea32239459d118f3379eb233, type: 2}
     level: 1
+  - moveBase: {fileID: 11400000, guid: 58ac57d5cf7fc384e8c475aa63381db0, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: 7bacd6a79596b9e429060e11ec9ad0ab, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: d11764f223c0613408bbf1ab5afbab81, type: 2}
+    level: 6
+  - moveBase: {fileID: 11400000, guid: b2a95facd91d5264f851a5a6c7480e44, type: 2}
+    level: 8

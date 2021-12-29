@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e086c3fc817f31842893ca3f55fe6386, type: 3}
+  m_Name: Kageuchi
+  m_EditorClassIdentifier: 
+  m_name: "\u304B\u3052\u3046\u3061"
+  m_description: 
+  m_type: 9
+  m_TypeSprite: {fileID: 21300000, guid: 894a15713fc28c948ada2d922a85b39d, type: 3}
+  m_power: 30
+  m_accuracy: 100
+  m_alwaysHits: 0
+  m_pp: 30
+  m_priority: 1
+  m_category: 0
+  m_effects:
+    boosts: []
+    status: 0
+    volatileStatus: 0
+  m_secondaries: []
+  m_target: 0

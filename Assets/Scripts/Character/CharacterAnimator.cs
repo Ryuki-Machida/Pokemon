@@ -27,7 +27,7 @@ public class CharacterAnimator : MonoBehaviour
     SpriteAnimator m_currentAnim;
 
     SpriteRenderer m_spriteRenderer;
-    bool previouslyMoving;
+    bool m_previouslyMoving;
 
     void Start()
     {
@@ -62,7 +62,7 @@ public class CharacterAnimator : MonoBehaviour
             m_currentAnim = m_downSpanim;
         }
 
-        if (m_currentAnim != prevAnim || IsMoving != previouslyMoving)
+        if (m_currentAnim != prevAnim || IsMoving != m_previouslyMoving)
         {
             m_currentAnim.Start();
         }
@@ -76,7 +76,7 @@ public class CharacterAnimator : MonoBehaviour
             m_spriteRenderer.sprite = m_currentAnim.Frames[0];
         }
 
-        previouslyMoving = IsMoving;
+        m_previouslyMoving = IsMoving;
     }
 
     /// <summary>

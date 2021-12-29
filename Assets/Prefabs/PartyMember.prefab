@@ -683,4 +683,3 @@ MonoBehaviour:
   m_levelText: {fileID: 8103891608058180191}
   m_hpBar: {fileID: 3260632873294694057}
   m_hpText: {fileID: 7816170146896249443}
-  m_color: {r: 1, g: 0.43867922, b: 0.9569581, a: 1}

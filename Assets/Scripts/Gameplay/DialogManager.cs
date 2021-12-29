@@ -10,14 +10,14 @@ public class DialogManager : MonoBehaviour
     [SerializeField] Text m_dialogText;
     [SerializeField] int m_lettersPerSecond;
 
-    public event Action OnShowDialog;
-    public event Action OnCloseDialog;
+    public event Action m_OnShowDialog;
+    public event Action m_OnCloseDialog;
 
-    Dialog dialog;
-    Action onDialogFinish;
+    Dialog m_dialog;
+    Action m_onDialogFinish;
 
     int m_currentLine = 0;
-    bool isTyping;
+    bool m_isTyping;
 
     public bool IsShowing { get; private set; }
 
@@ -50,11 +50,11 @@ public class DialogManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        OnShowDialog?.Invoke();
+        m_OnShowDialog?.Invoke();
 
         IsShowing = true;
-        this.dialog = dialog;
-        onDialogFinish = onFinish;
+        this.m_dialog = dialog;
+        m_onDialogFinish = onFinish;
 
         m_dialogBox.SetActive(true);
         StartCoroutine(TypeDialog(dialog.Lines[0]));
@@ -65,20 +65,20 @@ public class DialogManager : MonoBehaviour
     /// </summary>
     public void HandleUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !isTyping)
+        if (Input.GetKeyDown(KeyCode.Space) && !m_isTyping)
         {
             ++m_currentLine;
-            if (m_currentLine < dialog.Lines.Count)
+            if (m_currentLine < m_dialog.Lines.Count)
             {
-                StartCoroutine(TypeDialog(dialog.Lines[m_currentLine]));
+                StartCoroutine(TypeDialog(m_dialog.Lines[m_currentLine]));
             }
             else
             {
                 m_currentLine = 0;
                 IsShowing = false;
                 m_dialogBox.SetActive(false);
-                onDialogFinish?.Invoke();
-                OnCloseDialog?.Invoke();
+                m_onDialogFinish?.Invoke();
+                m_OnCloseDialog?.Invoke();
             }
         }
     }
@@ -88,13 +88,13 @@ public class DialogManager : MonoBehaviour
     /// </summary>
     public IEnumerator TypeDialog(string line)
     {
-        isTyping = true;
+        m_isTyping = true;
         m_dialogText.text = " ";
         foreach (var letter in line.ToCharArray())
         {
             m_dialogText.text += letter;
             yield return new WaitForSeconds(1f / m_lettersPerSecond);
         }
-        isTyping = false;
+        m_isTyping = false;
     }
 }

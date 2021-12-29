@@ -33,7 +33,7 @@ public class PartyScreen : MonoBehaviour
         m_party = PokemonParty.GetPlayerParty();
         SetPartyData();
 
-        m_party.OnUpdated += SetPartyData;
+        m_party.m_OnUpdated += SetPartyData;
     }
 
     /// <summary>

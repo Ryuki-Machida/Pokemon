@@ -22,9 +22,9 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] SoundManager m_soundManager;
 
     int m_selectedItem = 0;
-    InventoryUIState state;
+    InventoryUIState m_state;
 
-    Action onItemUsed;
+    Action m_onItemUsed;
 
     List<ItemSlotUI> m_slotUIList;
     Inventory m_inventory;
@@ -38,7 +38,7 @@ public class InventoryUI : MonoBehaviour
     {
         UpdateItemList();
 
-        m_inventory.OnUpdated += UpdateItemList;
+        m_inventory.m_OnUpdated += UpdateItemList;
     }
 
     /// <summary>
@@ -69,9 +69,9 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     public void HandleUpdate(Action onBack, Action onItemUsed = null)
     {
-        this.onItemUsed = onItemUsed;
+        this.m_onItemUsed = onItemUsed;
 
-        if (state == InventoryUIState.ItemSelection)
+        if (m_state == InventoryUIState.ItemSelection)
         {
             //バック
             int prevSelection = m_selectedItem;
@@ -101,7 +101,7 @@ public class InventoryUI : MonoBehaviour
                 onBack?.Invoke();
             }
         }
-        else if (state == InventoryUIState.PartySelection)
+        else if (m_state == InventoryUIState.PartySelection)
         {
             //パーティー画面
             Action onselected = () =>
@@ -123,14 +123,14 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     IEnumerator UseItem()
     {
-        state = InventoryUIState.Busy;
+        m_state = InventoryUIState.Busy;
 
         var usedItem = m_inventory.UseItem(m_selectedItem, m_partyScreen.SelectedMember);
         if (usedItem != null)
         {
             m_soundManager.ItemUse();
             yield return DialogManager.Instance.ShowDialogText($"{usedItem.Name}を使った");
-            onItemUsed?.Invoke();
+            m_onItemUsed?.Invoke();
         }
         else
         {
@@ -167,7 +167,7 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     void OpenPartyScreen()
     {
-        state = InventoryUIState.PartySelection;
+        m_state = InventoryUIState.PartySelection;
         m_partyScreen.gameObject.SetActive(true);
     }
 
@@ -176,7 +176,7 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     void ClosePartyScreen()
     {
-        state = InventoryUIState.ItemSelection;
+        m_state = InventoryUIState.ItemSelection;
         m_partyScreen.gameObject.SetActive(false);
     }
 }

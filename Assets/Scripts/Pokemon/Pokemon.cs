@@ -6,17 +6,17 @@ using System.Linq;
 [System.Serializable]
 public class Pokemon
 {
-    [SerializeField] PokemonBase _base;
-    [SerializeField] int level;
+    [SerializeField] PokemonBase m_base;
+    [SerializeField] int m_level;
 
     public PokemonBase Base
     {
-        get { return _base; }
+        get { return m_base; }
     }
 
     public int Level
     {
-        get { return level; }
+        get { return m_level; }
     }
 
     public int Exp { get; set; }
@@ -155,9 +155,11 @@ public class Pokemon
     /// </summary>
     public bool CheckForLevelUp()
     {
-        if (Exp > Base.GetExpForLevel(level + 1))
+        if (Exp > Base.GetExpForLevel(m_level + 1))
         {
-            ++level;
+            ++m_level;
+            ++HP;
+            ++MaxHp;
             return true;
         }
 
@@ -166,7 +168,7 @@ public class Pokemon
 
     public LearnableMove GetLearnableMoveAtCurrLevel()
     {
-        return Base.LearnableMoves.Where(x => x.Level == level).FirstOrDefault();
+        return Base.LearnableMoves.Where(x => x.Level == m_level).FirstOrDefault();
     }
 
     /// <summary>
@@ -214,6 +216,8 @@ public class Pokemon
     /// </summary>
     public DamageDetails TakeDamage(Move move, Pokemon attacker)
     {
+        //参考計算方法https://bulbapedia.bulbagarden.net/wiki/Damage
+
         float critical = 1f;
         if (Random.value * 100f <= 6.25f)
         {

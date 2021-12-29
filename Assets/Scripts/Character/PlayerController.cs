@@ -9,10 +9,10 @@ public class PlayerController : MonoBehaviour
 
     const float m_offsetY = 0.3f;
 
-    public event Action OnEncountered;
-    public event Action<Collider2D> OnTrainersView;
+    public event Action m_OnEncountered;
+    public event Action<Collider2D> m_OnTrainersView;
 
-    private Vector2 input;
+    private Vector2 m_input;
 
     Character m_character;
 
@@ -25,18 +25,18 @@ public class PlayerController : MonoBehaviour
     {
         if (!m_character.IsMoving)
         {
-            input.x = Input.GetAxisRaw("Horizontal");
-            input.y = Input.GetAxisRaw("Vertical");
+            m_input.x = Input.GetAxisRaw("Horizontal");
+            m_input.y = Input.GetAxisRaw("Vertical");
 
             //斜め移動が出来なくなる
-            if (input.x != 0)
+            if (m_input.x != 0)
             {
-                input.y = 0;
+                m_input.y = 0;
             }
 
-            if (input != Vector2.zero)
+            if (m_input != Vector2.zero)
             {
-                StartCoroutine(m_character.Move(input, OnMoveOver));
+                StartCoroutine(m_character.Move(m_input, OnMoveOver));
             }
         }
 
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
             if (UnityEngine.Random.Range(1, 50) <= 10) // 1マスごとにランダムで取得
             {
                 m_character.Animator.IsMoving = false;
-                OnEncountered(); //切り替え
+                m_OnEncountered(); //切り替え
             }
         }
     }
@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
         if (collider != null)
         {
             m_character.Animator.IsMoving = false;
-            OnTrainersView?.Invoke(collider);
+            m_OnTrainersView?.Invoke(collider);
         }
     }
 

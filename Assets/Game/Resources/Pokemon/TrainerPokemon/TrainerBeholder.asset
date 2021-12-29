@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55fecbe447b4ece428027d02d3bc7d48, type: 3}
+  m_Name: TrainerBeholder
+  m_EditorClassIdentifier: 
+  m_name: "\u30D3\u30E5\u30FC\u30A2"
+  m_description: 
+  m_PokemonObject: {fileID: 2211989947565642475, guid: e7ba5d9e5935e5b47906f84f8cc9af6b,
+    type: 3}
+  type1: 8
+  type2: 0
+  m_maxHp: 190
+  m_attack: 135
+  m_defense: 195
+  m_spAttack: 125
+  m_spDefense: 95
+  m_speed: 75
+  m_expYield: 90
+  m_growthRate: 0
+  m_learnableMoves:
+  - moveBase: {fileID: 11400000, guid: f8513b8196f898b4ea60828cec21eef8, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: c143f0328ce297d499ee486e69a06ae9, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: 8d4c5613ea32239459d118f3379eb233, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: c143f0328ce297d499ee486e69a06ae9, type: 2}
+    level: 1

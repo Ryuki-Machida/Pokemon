@@ -11,6 +11,8 @@ public class TrainerController : MonoBehaviour, Interactable
     [SerializeField] GameObject m_exclamation;
     [SerializeField] GameObject m_fov;
 
+    [SerializeField] SoundManager m_soundManager;
+
     bool m_battlelost = false;
 
     Character m_character;
@@ -56,10 +58,13 @@ public class TrainerController : MonoBehaviour, Interactable
     {
         //気づいた
         m_exclamation.SetActive(true);
+        m_soundManager.StopMap();
+        m_soundManager.Exclamation();
         yield return new WaitForSeconds(0.5f);
         m_exclamation.SetActive(false);
 
         //プレイヤーに向かって移動
+        m_soundManager.TrainerExclamation();
         var diff = player.transform.position - transform.position;
         var moveVec = diff - diff.normalized;
         moveVec = new Vector2(Mathf.Round(moveVec.x), Mathf.Round(moveVec.y));
