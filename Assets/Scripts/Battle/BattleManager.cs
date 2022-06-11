@@ -133,6 +133,8 @@ public class BattleManager : MonoBehaviour
     {
         m_state = BattleState.BattleOver;
         m_playerParty.Pokemons.ForEach(p => p.OnBattleOver());
+        m_playerUnit.Hud.ClearDate();
+        m_enemyUnit.Hud.ClearDate();
         m_OnBattleOver(won);
     }
 

@@ -137,4 +137,16 @@ public class BattleHud : MonoBehaviour
     {
         yield return new WaitUntil(() => m_hpBar.IsUpdating == false);
     }
+
+    /// <summary>
+    /// コルーチンをスタートさせない
+    /// </summary>
+    public void ClearDate()
+    {
+        if (m_pokemon != null)
+        {
+            m_pokemon.OnHPChanged -= UpdateHP;
+            m_pokemon.OnStatusChamged -= SetStatusUI;
+        }
+    }
 }
